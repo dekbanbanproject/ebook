@@ -182,8 +182,8 @@
                 <ul class="metismenu list-unstyled" id="side-menu">
                     <li class="menu-title">Menu</li>
                     <li>
-                        <a href="{{ url('ct_rep') }}">
-                            <i class="fa fa-lungs-virus text-info"></i>
+                        <a href="{{ url('main_user') }}"> 
+                            <i class="fa-solid fa-swatchbook text-primary"></i>
                             <span>Main </span>
                         </a>
                     </li>
