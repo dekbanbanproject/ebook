@@ -53,15 +53,15 @@ class LoginController extends Controller
         ]);
         if (auth()->attempt(array('username'=>$input['username'],'password'=>$input['password']))) {
            if (auth()->user()->type == 'ADMIN') {
-               return redirect()->route('admin.home');
+               return redirect()->route('main_admin');
             } elseif(auth()->user()->type == 'STAFF') {
-                return redirect()->route('staff.home');
+                return redirect()->route('main_staff');
             } elseif(auth()->user()->type == 'MANAGE') {
-                return redirect()->route('manage.home');     
+                return redirect()->route('main_manage');     
             } elseif(auth()->user()->type == 'USER') {
-                return redirect()->route('user.home');  
-            } elseif(auth()->user()->type == 'RPST') {
-                return redirect()->route('rpst.home_rpst');         
+                return redirect()->route('main_user');  
+            // } elseif(auth()->user()->type == 'RPST') {
+            //     return redirect()->route('rpst.home_rpst');         
            } else {
                 return redirect()->route('home');
            }

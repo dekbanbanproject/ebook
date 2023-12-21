@@ -25,15 +25,15 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::get('admin/home', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home')->middleware('type');
-Route::get('staff/home', [App\Http\Controllers\HomeController::class, 'staffHome'])->name('staff.home')->middleware('type');
-Route::get('user/home', [App\Http\Controllers\UserController::class, 'user_index'])->name('user.home')->middleware('type');
-Route::get('manage/home', [App\Http\Controllers\HomeController::class, 'manageHome'])->name('manage.home')->middleware('type');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('main_admin', [App\Http\Controllers\HomeController::class, 'main_admin'])->name('main_admin')->middleware('type');
+Route::get('main_staff', [App\Http\Controllers\HomeController::class, 'main_staff'])->name('main_staff')->middleware('type');
+Route::get('main_user', [App\Http\Controllers\HomeController::class, 'main_user'])->name('main_user')->middleware('type');
+Route::get('main_manage', [App\Http\Controllers\HomeController::class, 'main_manage'])->name('main_manage')->middleware('type');
 
 Route::middleware(['type'])->group(function(){
 
-
+Route::match(['get','post'],'admin_profile_edit/{id}',[App\Http\Controllers\HomeController::class, 'admin_profile_edit'])->name('pro.admin_profile_edit');//
 
 });
 
