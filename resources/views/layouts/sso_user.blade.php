@@ -156,7 +156,7 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end">
                             <!-- item-->
-                            <a class="dropdown-item" href="{{ url('profile_edit/' . Auth::user()->id) }}"
+                            <a class="dropdown-item" href="{{ url('user_editprofile/' . Auth::user()->id) }}"
                                 style="font-size: 12px"><i class="ri-user-line align-middle me-1"></i> Profile</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item text-danger" href="{{ route('logout') }}" {{-- class="text-reset notification-item" --}}
@@ -183,7 +183,7 @@
                     <li class="menu-title">Menu</li>
                     <li>
                         <a href="{{ url('main_user') }}"> 
-                            <i class="fa-solid fa-swatchbook text-primary"></i>
+                            <i class="fas fa-swatchbook text-primary"></i> 
                             <span>Main </span>
                         </a>
                     </li>

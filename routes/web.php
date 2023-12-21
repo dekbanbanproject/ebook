@@ -33,7 +33,8 @@ Route::get('main_manage', [App\Http\Controllers\HomeController::class, 'main_man
 
 Route::middleware(['type'])->group(function(){
 
-Route::match(['get','post'],'admin_profile_edit/{id}',[App\Http\Controllers\HomeController::class, 'admin_profile_edit'])->name('pro.admin_profile_edit');//
+Route::match(['get','post'],'user_editprofile/{id}',[App\Http\Controllers\HomeController::class, 'user_editprofile'])->name('u.user_editprofile');//
+Route::match(['get','post'],'user_profile_update',[App\Http\Controllers\HomeController::class, 'user_profile_update'])->name('u.user_profile_update');//
 
 });
 
