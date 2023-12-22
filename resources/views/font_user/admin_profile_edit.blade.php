@@ -191,9 +191,8 @@
                                         <br>
                                         <div class="input-group mb-3 mt-3">
 
-                                            <input type="file" class="form-control" id="img" name="img"
-                                            onchange="editpic(this)">
-                                        <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                                            <input type="file" class="form-control" id="img" name="img" onchange="editpic(this)">
+                                            <input type="hidden" name="_token" value="{{ csrf_token() }}">
                                         </div>
 
 
@@ -211,7 +210,7 @@
                                                     <button type="submit" class="btn btn-primary btn-sm">
                                                         <i class="fa-solid fa-floppy-disk me-2"></i>
                                                         แก้ไขข้อมูล
-                                                    </button>
+                                                    </button> 
                                                     <a href="{{ url('person/person_index') }}"
                                                         class="btn btn-danger btn-sm">
                                                         <i class="fa-solid fa-xmark me-2"></i>

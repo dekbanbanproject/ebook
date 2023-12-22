@@ -49,7 +49,7 @@
 
     <link href="{{ asset('css/fullcalendar.css') }}" rel="stylesheet">
     <!-- select2 -->
-    <link rel="stylesheet" href="{{ asset('asset/js/plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/select2/css/select2.min.css') }}">
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet"
         href="{{ asset('disacc/vendors/pixeden-stroke-7-icon-master/pe-icon-7-stroke/dist/pe-icon-7-stroke.css') }}">
@@ -78,7 +78,7 @@
         /* height: 100vh; ให้เต็มพอดี  */
     }
 
-    .Bgsidebar {
+    /* .Bgsidebar {
         background-image: url('/pkbackoffice/public/images/bgside.jpg');
         background-repeat: no-repeat;
     }
@@ -86,7 +86,7 @@
     .Bgheader {
         background-image: url('/pkbackoffice/public/images/bgheader.jpg');
         background-repeat: no-repeat;
-    }
+    } */
 </style>
 
 
@@ -143,7 +143,7 @@
                         <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             @if (Auth::user()->img == null)
-                                <img src="{{ asset('assets/images/default-image.jpg') }}" height="32px"
+                                <img src="{{ asset('assets/images/users/avatar-7.jpg') }}" height="32px"
                                     width="32px" alt="Header Avatar" class="rounded-circle header-profile-user">
                             @else
                                 <img src="{{ asset('storage/person/' . Auth::user()->img) }}" height="32px"

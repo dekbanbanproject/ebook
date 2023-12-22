@@ -47,25 +47,27 @@ class HomeController extends Controller
     }
     public function user_editprofile(Request $request,$id)
     { 
-        $data['q'] = $request->query('q');
-        $query = User::select('users.*') 
-        ->where(function ($query) use ($data){
-            $query->where('pname','like','%'.$data['q'].'%');
-            $query->orwhere('fname','like','%'.$data['q'].'%');
-            $query->orwhere('lname','like','%'.$data['q'].'%');
-            $query->orwhere('tel','like','%'.$data['q'].'%');
-            $query->orwhere('username','like','%'.$data['q'].'%');
-        });
-        $data['users'] = $query->orderBy('id','DESC')->get();
-        $data['department'] = Department::get();
-        $data['department_sub'] = Departmentsub::get();
+        $storeid = Auth::user()->store_id;
+        // $data['q'] = $request->query('q');
+        // $query = User::select('users.*') 
+        // ->where(function ($query) use ($data){
+        //     $query->where('pname','like','%'.$data['q'].'%');
+        //     $query->orwhere('fname','like','%'.$data['q'].'%');
+        //     $query->orwhere('lname','like','%'.$data['q'].'%');
+        //     $query->orwhere('tel','like','%'.$data['q'].'%');
+        //     $query->orwhere('username','like','%'.$data['q'].'%');
+        // });
+        // $data['users'] = $query->orderBy('id','DESC')->get();
+        $data['users']              = User::where('store_id','=',$storeid)->get();
+        $data['department']         = Department::get();
+        $data['department_sub']     = Departmentsub::get();
         $data['department_sub_sub'] = Departmentsubsub::get();
-        $data['position'] = Position::get();
-        $data['status'] = Status::get();
-        $data['users_prefix'] = Users_prefix::get();
-        $data['users_kind_type'] = Users_kind_type::get();
-        $data['users_group'] = Users_group::get(); 
-        $data['dataedits'] = User::where('id','=',$id)->first();
+        $data['position']           = Position::get();
+        $data['status']             = Status::get();
+        $data['users_prefix']       = Users_prefix::get();
+        $data['users_kind_type']    = Users_kind_type::get();
+        $data['users_group']        = Users_group::get(); 
+        $data['dataedits']          = User::where('id','=',$id)->first();
        
         return view('font_user.user_editprofile',$data);
     }
@@ -102,46 +104,65 @@ class HomeController extends Controller
     {
         $date =  date('Y');
         $maxid = User::max('id');
-        $idfile = $maxid+1;
-        $fname = $request->fullname;
-        $lname = $request->lname;
-        $pname = $request->pname;
-        // dd($fname);
-        $idper = $request->input('id');
-        $usernameup = $request->input('username');
-        $count_check = User::where('username','=',$usernameup)->count(); 
-            
-                $update = User::find($idper);
-                $update->fname = $fname;
-                $update->lname = $lname;     
-                $update->pname = $pname; 
-                $update->cid = $request->cid;   
-                $update->username = $usernameup; 
-                // $update->money = $request->money;
-                $update->line_token = $request->line_token;
+        $idfile = $maxid+1; 
+        $idper = $request->id; 
+        // $count_check = User::where('username','=',$request->username)->count(); 
 
-                // $pass = $request->password;
-            
-                $update->password = Hash::make($request->password);
-                // $update->member_id =  'MEM'. $date .'-'.$idfile; 
-                if ($request->hasfile('img')) {
-                    $description = 'storage/person/'.$update->img;
-                    if (File::exists($description))
-                    {
-                        File::delete($description);
-                    }
-                    $file = $request->file('img');
-                    $extention = $file->getClientOriginalExtension();
-                    $filename = time().'.'.$extention; 
-                    $request->img->storeAs('person',$filename,'public'); 
-                    $update->img = $filename;
-                    $update->img_name = $filename;
+        // if ($count_check > 0) {
+        //     return response()->json([
+        //         'status'     => '100'
+        //     ]); 
+        // } else {
+            $update = User::find($idper);
+            $update->fname       = $request->fname;
+            $update->lname       = $request->lname;    
+            $update->pname       = $request->pname;
+            $update->cid         = $request->cid;   
+            $update->username    = $request->username; 
+            $update->line_token  = $request->line_token; 
+
+            $pass                = $request->password;
+
+            $update->password    = Hash::make($pass);
+            $update->passapp     = $pass;
+
+            if ($request->hasfile('img')) {
+                $description = 'storage/person/'.$update->img;
+                if (File::exists($description))
+                {
+                    File::delete($description);
                 }
-                $update->save();
+                $file = $request->file('img');
+                $extention = $file->getClientOriginalExtension();
+                $filename = time().'.'.$extention; 
+                $request->img->storeAs('person',$filename,'public'); 
+                $update->img = $filename;
+                $update->img_name = $filename;
+            }
+            $update->save();
 
-                return response()->json([
-                    'status'     => '200'
-                ]); 
+            // // $update->member_id =  'MEM'. $date .'-'.$idfile; 
+            // if ($request->hasfile('img')) {
+            //     $description = 'storage/person/'.$request->img;
+            //     if (File::exists($description))
+            //     {
+            //         File::delete($description);
+            //     }
+            //     $file = $request->file('img');
+            //     // dd($file);
+            //     $extention = $file->getClientOriginalExtension();
+            //     $filename = time().'.'.$extention; 
+            //     $request->img->storeAs('person',$filename,'public'); 
+            //     $update->img = $filename;
+            //     $update->img_name = $filename;
+            // }
+            // $update->save();
+            return response()->json([
+                'status'     => '200'
+            ]); 
+        // }
+         
+                
     }
 
     public function password_update(Request $request)
