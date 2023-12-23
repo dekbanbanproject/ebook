@@ -226,9 +226,9 @@
                                 <div class="col-lg-2">
                                     <div class="mb-3">
                                         <label class="form-label" for="pname">คำนำหน้า :</label>
-                                        <select id="pname" name="pname" class="form-control select2 show_pre"
+                                        <select id="pname" name="pname" class="form-control "
                                             style="width: 100%">
-                                            <option value=""></option>
+                                            {{-- <option value=""></option> --}}
                                             @foreach ($users_prefix as $pre)
                                                 @if ($dataedits->pname == $pre->prefix_id)
                                                     <option value="{{ $pre->prefix_id }}" selected>
@@ -258,11 +258,27 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-3">
                                     <div class="mb-3">
                                         <label class="form-label" for="cid">บัตรประชาชน</label>
-                                        <input type="text" class="form-control form-control-sm" id="cid"
-                                            name="cid" value="{{ $dataedits->cid }}">
+                                        <input type="text" class="form-control form-control-sm" id="cid" name="cid" value="{{ $dataedits->cid }}">
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="position_id">ตำแหน่ง</label>
+                                        <select id="position_id" name="position_id" class="form-control"
+                                            style="width: 100%">
+                                            {{-- <option value=""></option> --}}
+                                            @foreach ($position as $po)
+                                                @if ($dataedits->position_id == $po->POSITION_ID)
+                                                    <option value="{{ $po->POSITION_ID }}" selected> {{ $po->POSITION_NAME }} </option>
+                                                @else
+                                                    <option value="{{ $po->POSITION_ID }}">{{ $po->POSITION_NAME }} </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                       
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
@@ -327,6 +343,10 @@
                     $('#example').DataTable();
                     $('#example2').DataTable();
                     $('#pname').select2({
+                        placeholder: "--เลือก--",
+                        allowClear: true
+                    });
+                    $('#position_id').select2({
                         placeholder: "--เลือก--",
                         allowClear: true
                     });

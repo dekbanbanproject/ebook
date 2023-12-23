@@ -43,7 +43,13 @@ class HomeController extends Controller
     }
     public function main_user(Request $request)
     {
-        return view('font_user.main_user');
+        $startdate = $request->startdate;
+        $enddate = $request->enddate;
+
+        return view('font_user.main_user',[
+            'startdate'     =>     $startdate,
+            'enddate'       =>     $enddate,
+        ]);
     }
     public function user_editprofile(Request $request,$id)
     { 
@@ -117,10 +123,11 @@ class HomeController extends Controller
             $update->fname       = $request->fname;
             $update->lname       = $request->lname;    
             $update->pname       = $request->pname;
-            $update->cid         = $request->cid;   
+            $update->cid         = $request->cid;  
+            $update->position_id = $request->position_id; 
             $update->username    = $request->username; 
             $update->line_token  = $request->line_token; 
-
+            
             $pass                = $request->password;
 
             $update->password    = Hash::make($pass);

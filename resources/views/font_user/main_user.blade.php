@@ -151,13 +151,73 @@ $yb = date('Y') + 542;
         </div>
         <!-- end page title -->
     </div> <!-- container-fluid -->
+
+        <form action="{{ url('main_user') }}" method="GET">
+            @csrf
+        <div class="row">  
+            <div class="col"></div>
+            <div class="col-md-1 text-end mt-2">วันที่</div>
+            <div class="col-md-6 text-end">
+                <div class="input-daterange input-group" id="datepicker1" data-date-format="dd M, yyyy" data-date-autoclose="true" data-provide="datepicker" data-date-container='#datepicker1'>
+                    <input type="text" class="form-control d-shadow" name="startdate" id="datepicker" placeholder="Start Date" data-date-container='#datepicker1' data-provide="datepicker" data-date-autoclose="true" autocomplete="off"
+                        data-date-language="th-th" value="{{ $startdate }}" required/>
+                    <input type="text" class="form-control d-shadow" name="enddate" placeholder="End Date" id="datepicker2" data-date-container='#datepicker1' data-provide="datepicker" data-date-autoclose="true" autocomplete="off"
+                        data-date-language="th-th" value="{{ $enddate }}"/>   
+                        <button type="submit" class="ladda-button btn-pill btn btn-primary d-shadow" data-style="expand-left">
+                            <span class="ladda-label"> <i class="fa-solid fa-magnifying-glass text-white me-2"></i>ค้นหา</span>
+                            <span class="ladda-spinner"></span>
+                        </button>  
+                </div> 
+            </div>
+        </div>      
+        </form>
+
+
+       
  
 
-    <div class="row">
+    <div class="row mt-3">
         <div class="col-xl-12">
             <div class="card cardshadow">
                 <div class="card-body">  
-                  252555555555555555555
+                    <p class="mb-0">
+                        <div class="table-responsive">
+                            <table id="example" class="table table-hover table-sm dt-responsive nowrap"
+                            style=" border-spacing: 0; width: 100%;">
+                                <thead>
+                                    <tr> 
+                                        <th width="5%" class="text-center">ลำดับ</th>  
+                                        <th class="text-center">หนังสืออ้างอิง</th>
+                                        <th class="text-center" >เลขที่หนังสือ</th>
+                                        <th class="text-center" >เรื่อง</th>
+                                        <th class="text-center">หน่วยงานที่จัด</th>
+                                        <th class="text-center">ประเภท</th> 
+                                        <th class="text-center">วันที่</th>  
+                                        <th class="text-center">ถึงวันที่</th> 
+                                        <th class="text-center">พาหนะ</th>
+                                        <th class="text-center">หัวหน้า</th>  
+                                        <th class="text-center">ค่าสารทึบแสง</th>
+                                        <th class="text-center">before</th> 
+                                    </tr>
+                                </thead>
+                                {{-- <tbody>
+                                    <?php $i = 1; ?>
+                                    @foreach ($datashow as $item) 
+                                        <tr id="tr_{{$item->a_stm_ct_id}}">                                                  
+                                            <td class="text-center" width="5%">{{ $i++ }}</td>    
+                                            <td class="text-center" width="5%">{{ $item->vn }}</td> 
+                                            <td class="text-center" width="5%">{{ $item->hn }}</td>  
+                                            <td class="text-center" width="10%">{{ $item->cid }}</td>  
+                                            <td class="p-2" >{{ $item->ptname }}</td>  
+                                            <td class="text-center" style="color:rgb(216, 95, 14)" width="5%">{{ $item->ptty_spsch }}</td>  
+                                            <td class="text-center" width="10%">{{ number_format($item->price_check, 2) }}</td>  
+                                        </tr>
+ 
+                                    @endforeach
+                                </tbody> --}}
+                            </table>
+                        </div>
+                    </p>
                 </div>
             </div>
         </div>

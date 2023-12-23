@@ -49,7 +49,9 @@
 
     <link href="{{ asset('css/fullcalendar.css') }}" rel="stylesheet">
     <!-- select2 -->
-    <link rel="stylesheet" href="{{ asset('assets/select2/css/select2.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('assets/select2/css/select2.min.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('select2/css/select2.min.css') }}"> 
+
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet"
         href="{{ asset('disacc/vendors/pixeden-stroke-7-icon-master/pe-icon-7-stroke/dist/pe-icon-7-stroke.css') }}">
@@ -254,8 +256,8 @@
     <script src="{{ asset('dis/libs/metismenu/metisMenu.min.js') }}"></script>
     <script src="{{ asset('dis/libs/simplebar/simplebar.min.js') }}"></script>
     <script src="{{ asset('dis/libs/node-waves/waves.min.js') }}"></script>
-
-    <script src="{{ asset('js/select2.min.js') }}"></script>
+    {{-- <script src="{{ asset('js/select2.min.js') }}"></script> --}}
+    <script src="{{ asset('select2/js/select2.min.js') }}"></script>
     {{-- <script src="{{ asset('dis/libs/select2/js/select2.min.js') }}"></script> --}}
     <script src="{{ asset('dis/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
     <script src="{{ asset('dis/libs/spectrum-colorpicker2/spectrum.min.js') }}"></script>
