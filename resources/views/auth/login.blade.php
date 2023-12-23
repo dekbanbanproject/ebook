@@ -37,8 +37,8 @@
 
                         <div class="text-center mt-4">
                             <div class="mb-3">
-                                <a href="index.html" class="auth-logo">
-                                    <img src="assets/images/logo_login.png" height="100" class="logo-dark mx-auto" alt="">
+                                <a href="" class="auth-logo">
+                                    <img src="assets/images/logo_login2.png" height="150" class="logo-dark mx-auto" alt="">
                                     <img src="assets/images/logo-light.png" height="30" class="logo-light mx-auto" alt="">
                                 </a>
                             </div>
