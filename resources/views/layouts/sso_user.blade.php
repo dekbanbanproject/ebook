@@ -190,12 +190,12 @@
                         </a>
                     </li>
                     
-                    {{-- <li>
-                        <a href="{{ url('ct_rep_pay') }}">
-                            <i class="fa fa-lungs-virus text-success"></i>
-                            <span>CT Pay Report</span>
+                    <li>
+                        <a href="{{ url('user_train') }}">
+                            <i class="fas fa-swatchbook text-success"></i>
+                            <span>ประชุม/อบรม/ดูงาน</span>
                         </a>
-                    </li> --}}
+                    </li>
                     {{-- <li>
                         <a href="{{ url('ct_rep_import') }}">
                             <i class="fa fa-lungs-virus text-primary"></i>

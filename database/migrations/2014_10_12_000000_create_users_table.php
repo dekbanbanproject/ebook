@@ -39,6 +39,10 @@ return new class extends Migration
             $table->date('end_date')->nullable();
             $table->enum('type', ['ADMIN', 'STAFF', 'CUSTOMER', 'MANAGE','USER','NOTUSER'])->default('USER');
             $table->string('passapp')->nullable();
+            $table->text('signature')->nullable();
+            $table->text('signature_hn')->nullable(); // หัวหน้า
+            $table->text('signature_gr')->nullable();  // หัวหน้ากลุ่ม
+            $table->text('signature_po')->nullable();  // ผอ
             $table->string('line_token')->nullable();
             $table->string('group_p4p')->nullable();            
             $table->string('dep_id')->nullable(); 

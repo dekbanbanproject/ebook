@@ -36,5 +36,7 @@ Route::middleware(['type'])->group(function(){
 Route::match(['get','post'],'user_editprofile/{id}',[App\Http\Controllers\HomeController::class, 'user_editprofile'])->name('u.user_editprofile');//
 Route::match(['get','post'],'user_profile_update',[App\Http\Controllers\HomeController::class, 'user_profile_update'])->name('u.user_profile_update');//
 
+Route::match(['get','post'],'user_train',[App\Http\Controllers\TrainController::class, 'user_train'])->name('u.user_train');//
+
 });
 
