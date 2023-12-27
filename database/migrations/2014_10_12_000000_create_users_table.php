@@ -97,6 +97,9 @@ return new class extends Migration
             $table->string('staff')->nullable();  
             $table->string('loginname')->nullable(); 
             $table->string('passweb')->nullable(); 
+            $table->string('hn_id')->nullable(); 
+            $table->string('head_group_id')->nullable(); 
+            $table->string('po_id')->nullable(); 
             $table->rememberToken();
             $table->timestamps();
         });

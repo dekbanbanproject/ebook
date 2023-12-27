@@ -299,10 +299,27 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-12">
+                                <div class="col-lg-6">
                                     <div class="mb-3">
                                         <label class="form-label" for="line_token">Line Token</label>
                                         <textarea id="line_token" name="line_token" class="form-control" rows="2">{{ $dataedits->line_token }}</textarea>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="hn_id">หัวหน้า</label>
+                                        <select id="hn_id" name="hn_id" class="form-control"
+                                            style="width: 100%">
+                                            {{-- <option value=""></option> --}}
+                                            @foreach ($users as $hn)
+                                                @if ($dataedits->hn_id == $hn->id)
+                                                    <option value="{{ $hn->id }}" selected> {{ $hn->fname }} {{ $hn->lname }} </option>
+                                                @else
+                                                    <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                       
                                     </div>
                                 </div>
                             </div>
@@ -347,6 +364,10 @@
                         allowClear: true
                     });
                     $('#position_id').select2({
+                        placeholder: "--เลือก--",
+                        allowClear: true
+                    });
+                    $('#hn_id').select2({
                         placeholder: "--เลือก--",
                         allowClear: true
                     });

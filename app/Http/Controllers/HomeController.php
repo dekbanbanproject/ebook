@@ -127,6 +127,7 @@ class HomeController extends Controller
             $update->position_id = $request->position_id; 
             $update->username    = $request->username; 
             $update->line_token  = $request->line_token; 
+            $update->hn_id       = $request->hn_id; 
             
             $pass                = $request->password;
 

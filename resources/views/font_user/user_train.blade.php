@@ -10,6 +10,7 @@
 if (Auth::check()) {
     $type = Auth::user()->type;
     $iduser = Auth::user()->id;
+    $hnid = Auth::user()->hn_id;
 } else {
     echo "<body onload=\"TypeAdmin()\"></body>";
     exit();
@@ -110,6 +111,16 @@ $yb = date('Y') + 542;
 
         .datepicker {
             z-index: 2051 !important;
+        }
+        .dcheck{         
+            width: 30px;
+            height: 30px;       
+            /* border-radius: 2em 2em 2em 2em; */
+            /* border: 10px solid teal; */
+            /* color: teal; */
+            /* border-color: teal; */
+            box-shadow: 0 0 10px teal;
+            /* box-shadow: 0 0 10px teal; */
         }
 </style>
   
@@ -230,11 +241,11 @@ $yb = date('Y') + 542;
         <div class="modal-header">
             <div class="row"> 
                 <div class="col-md-8">
-                    <h5 class="modal-title" id="editModalLabel">ยื่นเรื่อง</h5>
+                    <h5 class="modal-title" id="InsertModalLabel">ยื่นเรื่อง</h5>
                 </div>
                 <div class="col-md-4 text-end">
                     <div class="form-group">
-                        <button type="button" id="Updatedata" class="btn-icon btn-shadow btn-dashed btn btn-outline-info me-2"> 
+                        <button type="button" id="SaveBtn" class="btn-icon btn-shadow btn-dashed btn btn-outline-info me-2"> 
                             <i class="pe-7s-diskette btn-icon-wrapper me-2"></i> Save
                         </button>
                         <button type="button" class="btn-icon btn-shadow btn-dashed btn btn-outline-danger" data-bs-dismiss="modal">
@@ -246,27 +257,33 @@ $yb = date('Y') + 542;
         </div>
         <div class="modal-body">
             <div class="row">
-                <div class="col-md-9"> 
+                {{-- <div class="col-md-9"> 
+                    <div class="mb-3">
+                        <label class="form-label" for="train_book_advert" >หนังสืออ้างอิง :</label>
+                        <input type="text" class="form-control form-control-sm" id="train_book_advert" name="train_book_advert" >
+                    </div>
+                </div> --}}
+                {{-- <div class="col-md-3 mt-4">  
+                        <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="modal" data-bs-target="#MyModal" data-bs-toggle="tooltip" data-bs-placement="right" title="ขอไปราชการ"> 
+                            <i class="fas fa-book-reader me-2"></i> 
+                            หนังสืออ้างอิง
+                        </button> 
+                </div> --}}
+            </div>
+            <div class="row">
+                <div class="col-md-3"> 
                     <div class="mb-3">
                         <label class="form-label" for="train_book_advert" >หนังสืออ้างอิง :</label>
                         <input type="text" class="form-control form-control-sm" id="train_book_advert" name="train_book_advert" >
                     </div>
                 </div>
-                <div class="col-md-3 mt-4">  
-                        <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="modal" data-bs-target="#MyModal" data-bs-toggle="tooltip" data-bs-placement="right" title="ขอไปราชการ"> 
-                            <i class="fas fa-book-reader me-2"></i> 
-                            หนังสืออ้างอิง
-                        </button> 
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label class="form-label" for="train_book_no" >เลขที่หนังสือ :</label>
                         <input type="text" class="form-control form-control-sm" id="train_book_no" name="train_book_no" >
                     </div>
                 </div> 
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label class="form-label" for="train_date_go" >วันที่ไป :</label> 
                         <div class="input-group input-group-sm">  
@@ -274,9 +291,9 @@ $yb = date('Y') + 542;
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
-                        <label class="form-label" for="train_date_go" >วันที่กลีบ :</label> 
+                        <label class="form-label" for="train_date_back" >วันที่กลับ :</label> 
                         <div class="input-group input-group-sm">  
                             <input type="text" id="train_date_back" class="form-control" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off">
                         </div>
@@ -294,17 +311,30 @@ $yb = date('Y') + 542;
             <div class="row">
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label class="form-label" for="train_book_no" >รายละเอียด :</label>
-                        <textarea class="form-control form-control-sm" name="" id="" rows="3" id="train_detail" name="train_detail"></textarea>
+                        <label class="form-label" for="train_detail" >รายละเอียด :</label>
+                        <textarea class="form-control form-control-sm" rows="3" id="train_detail" name="train_detail"></textarea>
                         
                     </div>
                 </div> 
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_locate" >สถานที่จัด :</label> 
+                        <input type="text" class="form-control form-control-sm" id="train_locate" name="train_locate" >
+                    </div>
+                </div> 
+                 
+            </div>  
+            <div class="row">
                 <div class="col-md-4">
                     <div class="mb-3">
-                        <label class="form-label" for="train_assign_work" >มอบหมายงานให้ :</label>
-                        <input type="text" class="form-control form-control-sm" id="train_assign_work" name="train_assign_work" >
+                        <label class="form-label" for="train_assign_work" >มอบหมายงานให้ :</label> 
+                        <select id="train_assign_work" name="train_assign_work" class="form-control" style="width: 100%"> 
+                            @foreach ($users as $hn) 
+                                    <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option> 
+                            @endforeach
+                        </select>
                     </div>
                 </div> 
                 <div class="col-md-4">
@@ -317,14 +347,60 @@ $yb = date('Y') + 542;
                 </div>
                 <div class="col-md-4">
                     <div class="mb-3">
-                        <label class="form-label" for="train_date_go" >หัวหน้า :</label> 
-                        <div class="input-group input-group-sm">  
-                            <input type="text" class="form-control form-control-sm" id="train_vehicle" name="train_vehicle" >
+                        <label class="form-label" for="train_head" >หัวหน้า :</label> 
+                        <div class="input-group input-group-sm">   
+                            <select id="train_head" name="train_head" class="form-control" style="width: 100%"> 
+                            @foreach ($users as $hn)
+                                @if ($hnid == $hn->id)
+                                    <option value="{{ $hn->id }}" selected> {{ $hn->fname }} {{ $hn->lname }} </option>
+                                @else
+                                    <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option>
+                                @endif
+                            @endforeach
+                        </select>
                         </div>
                     </div>
                 </div>
             </div>
-           
+            <div class="row"> 
+                <div class="col"></div>
+                <div class="col-md-4">
+                    {{-- <div class="mb-3">
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses" id="train_expenses" checked>
+                        <label class="form-check-label mt-2" for="train_expenses">
+                            เบิกค่าใช้จ่าย
+                        </label>
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses" id="train_expenses2">
+                        <label class="form-check-label mt-2" for="train_expenses2">
+                            ไม่เบิกค่าใช้จ่าย
+                        </label>
+                        
+                    </div> --}}
+                </div> 
+                {{-- <div class="col-md-4">
+                    <div class="mb-3"> 
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses_out" id="train_expenses_out" >
+                        <label class="form-check-label mt-2" for="train_expenses_out">
+                            เบิกค่าใช้จ่ายจากผู้จัด
+                        </label>
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses_out" id="train_expenses_out2">
+                        <label class="form-check-label mt-2" for="train_expenses_out2">
+                            ไม่เบิกค่าใช้จ่ายจากผู้จัด
+                        </label>
+                    </div>
+                </div>  --}}
+                {{-- <div class="col-md-4">
+                    <div class="mb-3"> 
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses_n" id="train_expenses" value="N">
+                        <label class="form-check-label mt-2" for="train_expenses_n">
+                            ไม่เบิกค่าใช้จ่าย
+                        </label>
+                    </div>
+                </div>  --}}
+                <div class="col"></div>
+            </div>  
+        </div>
+        <div class="modal-footer">
         </div>
     </div>
 </div> 
@@ -345,15 +421,72 @@ $yb = date('Y') + 542;
         $('[data-toggle="datepicker"]').datepicker({ 
                 autoHide: true,
                 zIndex: 2048,
+        });
+        $('#train_head').select2({
+            dropdownParent: $('#MyModal')
+        });
+        $('#train_assign_work').select2({
+            dropdownParent: $('#MyModal')
+        });
+        
+        // Insertdata
+        $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
-        $('#stamp').on('click', function(e) {
-        if($(this).is(':checked',true))  
-        {
-            $(".sub_chk").prop('checked', true);  
-        } else {  
-            $(".sub_chk").prop('checked',false);  
-        }  
-        }); 
+
+            $('#SaveBtn').click(function() {
+                var train_book_advert = $('#train_book_advert').val();
+                var train_book_no = $('#train_book_no').val();
+                var train_date_go = $('#train_date_go').val();
+                var train_date_back = $('#train_date_back').val();
+                var train_title = $('#train_title').val();
+                var train_detail = $('#train_detail').val();
+                var train_assign_work = $('#train_assign_work').val();
+                var train_vehicle = $('#train_vehicle').val();
+                var train_head = $('#train_head').val();
+                var train_locate = $('#train_locate').val();
+                var train_expenses = $('#train_expenses').val();
+                var train_expenses_out = $('#train_expenses_out').val();
+                // var train_expenses_n = $('#train_expenses_n').val();
+                // alert(train_expenses);
+                $.ajax({
+                    url: "{{ route('u.user_train_save') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
+                        train_book_advert, train_book_no, train_date_go,
+                        train_date_back, train_title, train_detail,train_expenses,train_expenses_out,
+                        train_assign_work, train_vehicle,train_head,train_locate
+                    },
+                    success: function(data) {
+                        if (data.status == 200) {
+                            Swal.fire({
+                                title: 'เพิ่มข้อมูลสำเร็จ',
+                                text: "You Insert data success",
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#06D177',
+                                confirmButtonText: 'เรียบร้อย'
+                            }).then((result) => {
+                                if (result
+                                    .isConfirmed) {
+                                    console.log(
+                                        data);
+
+                                    window.location
+                                        .reload();
+                                }
+                            })
+                        } else {
+
+                        }
+
+                    },
+                });
+            });
+      
     }); 
 </script>
 @endsection
