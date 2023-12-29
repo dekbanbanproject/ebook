@@ -44,6 +44,27 @@ class TrainController extends Controller
             'enddate'       =>     $enddate,
         ]);
     }
+
+    public function user_train_add(Request $request)
+    {
+        $storeid = Auth::user()->store_id;
+        $startdate = $request->startdate;
+        $enddate = $request->enddate;
+        $data['users']              = User::where('store_id','=',$storeid)->get();
+        $data['department']         = Department::get();
+        $data['department_sub']     = Departmentsub::get();
+        $data['department_sub_sub'] = Departmentsubsub::get();
+        $data['position']           = Position::get();
+        $data['status']             = Status::get();
+        $data['users_prefix']       = Users_prefix::get();
+        $data['users_kind_type']    = Users_kind_type::get();
+        $data['users_group']        = Users_group::get(); 
+
+        return view('font_user.user_train_add',$data,[
+            'startdate'     =>     $startdate,
+            'enddate'       =>     $enddate,
+        ]);
+    }
         
     public function user_train_save(Request $request)
     { 

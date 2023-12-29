@@ -161,11 +161,15 @@ $yb = date('Y') + 542;
         <form action="{{ url('main_user') }}" method="GET">
             @csrf
         <div class="row">  
-            <div class="col-md-1 text-end mt-2">
-                <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="modal" data-bs-target="#MyModal" data-bs-toggle="tooltip" data-bs-placement="right" title="ขอไปราชการ"> 
+            <div class="col-md-2 text-start">
+                {{-- <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="modal" data-bs-target="#MyModal" data-bs-toggle="tooltip" data-bs-placement="right" title="ขอไปราชการ"> 
                     <i class="fas fa-book-reader me-2"></i> 
                     ยื่นเรื่อง
-                </button>
+                </button> --}}
+                <a href="{{url('user_train_add')}}" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="tooltip" data-bs-placement="right" title="ยื่นเรื่องขอไปราชการ"> 
+                    <i class="fas fa-book-reader me-2"></i> 
+                    ยื่นเรื่องขอไปราชการ
+                </a>
             </div>
             <div class="col"></div>
             <div class="col-md-1 text-end mt-2">วันที่</div>

@@ -37,6 +37,7 @@ Route::match(['get','post'],'user_editprofile/{id}',[App\Http\Controllers\HomeCo
 Route::match(['get','post'],'user_profile_update',[App\Http\Controllers\HomeController::class, 'user_profile_update'])->name('u.user_profile_update');//
 
 Route::match(['get','post'],'user_train',[App\Http\Controllers\TrainController::class, 'user_train'])->name('u.user_train');//
+Route::match(['get','post'],'user_train_add',[App\Http\Controllers\TrainController::class, 'user_train_add'])->name('u.user_train_add');//
 Route::match(['get','post'],'user_train_save',[App\Http\Controllers\TrainController::class, 'user_train_save'])->name('u.user_train_save');//
 
 });
