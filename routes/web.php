@@ -39,6 +39,10 @@ Route::match(['get','post'],'user_profile_update',[App\Http\Controllers\HomeCont
 Route::match(['get','post'],'user_train',[App\Http\Controllers\TrainController::class, 'user_train'])->name('u.user_train');//
 Route::match(['get','post'],'user_train_add',[App\Http\Controllers\TrainController::class, 'user_train_add'])->name('u.user_train_add');//
 Route::match(['get','post'],'user_train_save',[App\Http\Controllers\TrainController::class, 'user_train_save'])->name('u.user_train_save');//
+Route::match(['get','post'],'user_train_edit/{id}',[App\Http\Controllers\TrainController::class, 'user_train_edit'])->name('u.user_train_edit');//
+Route::match(['get','post'],'user_train_update',[App\Http\Controllers\TrainController::class, 'user_train_update'])->name('u.user_train_update');//
+
+Route::match(['get','post'],'addlocation',[App\Http\Controllers\TrainController::class, 'addlocation'])->name('u.addlocation');//
 
 });
 

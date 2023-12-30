@@ -158,10 +158,10 @@ $yb = date('Y') + 542;
         <!-- end page title -->
     </div> <!-- container-fluid -->
 
-        <form action="{{ url('main_user') }}" method="GET">
+        <form action="{{ url('user_train') }}" method="GET">
             @csrf
         <div class="row">  
-            <div class="col-md-2 text-start">
+            <div class="col-md-3 text-start">
                 {{-- <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="modal" data-bs-target="#MyModal" data-bs-toggle="tooltip" data-bs-placement="right" title="ขอไปราชการ"> 
                     <i class="fas fa-book-reader me-2"></i> 
                     ยื่นเรื่อง
@@ -207,28 +207,30 @@ $yb = date('Y') + 542;
                                         <th class="text-center" >เลขที่หนังสือ</th>
                                         <th class="text-center" >เรื่อง</th>
                                         {{-- <th class="text-center">หน่วยงานที่จัด</th>  --}}
-                                        <th class="text-center">วันที่</th>  
+                                        <th class="text-center">วันที่ไป</th>  
                                         <th class="text-center">ถึงวันที่</th> 
-                                        <th class="text-center">พาหนะ</th>
-                                        <th class="text-center">หัวหน้า</th>  
+                                        {{-- <th class="text-center">พาหนะ</th> --}}
+                                        {{-- <th class="text-center">หัวหน้า</th>   --}}
                                         <th class="text-center">มอบหมายงายนให้</th> 
                                     </tr>
                                 </thead>
-                                {{-- <tbody>
+                                <tbody>
                                     <?php $i = 1; ?>
-                                    @foreach ($datashow as $item) 
-                                        <tr id="tr_{{$item->a_stm_ct_id}}">                                                  
+                                    @foreach ($train as $item) 
+                                    
+                                        <tr id="tr_{{$item->train_id}}" >                                                  
                                             <td class="text-center" width="5%">{{ $i++ }}</td>    
-                                            <td class="text-center" width="5%">{{ $item->vn }}</td> 
-                                            <td class="text-center" width="5%">{{ $item->hn }}</td>  
-                                            <td class="text-center" width="10%">{{ $item->cid }}</td>  
-                                            <td class="p-2" >{{ $item->ptname }}</td>  
-                                            <td class="text-center" style="color:rgb(216, 95, 14)" width="5%">{{ $item->ptty_spsch }}</td>  
-                                            <td class="text-center" width="10%">{{ number_format($item->price_check, 2) }}</td>  
+                                            <td class="text-center" width="5%">{{ $item->train_book_advert }}</td> 
+                                            <td class="text-center" width="5%"><a href="{{url('user_train_edit/'.$item->train_id)}}">{{ $item->train_book_no }} </a></td>  
+                                            <td class="p-2">{{ $item->train_title }}</td>  
+                                            <td class="text-center" width="8%">{{ $item->train_date_go }}</td> 
+                                            <td class="text-center" width="8%">{{ $item->train_date_back }}</td> 
+                                            {{-- <td class="text-center" width="10%">{{ $item->train_vehicle }}</td>  --}}
+                                            <td class="text-center" width="10%">{{ $item->fname }} {{ $item->lname }}</td>   
                                         </tr>
- 
+                                 
                                     @endforeach
-                                </tbody> --}}
+                                </tbody>
                             </table>
                         </div>
                     </p>

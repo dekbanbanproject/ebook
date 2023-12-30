@@ -188,20 +188,20 @@ $datenow = date('Y-m-d');
                                 <label class="form-label" for="train_book_advert" >หนังสืออ้างอิง </label> 
                             </div>
                             <div class="col-md-2">   
-                                <input type="text" class="form-control form-control-sm" id="train_book_advert" name="train_book_advert" > 
+                                <input type="text" class="form-control form-control-sm" id="train_book_advert" name="train_book_advert" value="{{$dataedits->train_book_advert}}"> 
                             </div>
                             <div class="col-md-2"> 
                                     <label class="form-label" for="train_book_no" >เลขที่หนังสือ </label> 
                             </div> 
                             <div class="col-md-2">  
-                                <input type="text" class="form-control form-control-sm" id="train_book_no" name="train_book_no" > 
+                                <input type="text" class="form-control form-control-sm" id="train_book_no" name="train_book_no" value="{{$dataedits->train_book_no}}"> 
                             </div> 
                            
                             <div class="col-md-2"> 
                                 <label class="form-label" for="train_date_go" >วันที่ไป </label> 
                             </div> 
                             <div class="col-md-2">  
-                                <input type="text" id="train_date_go" class="form-control form-control-sm" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off"> 
+                                <input type="text" id="train_date_go" class="form-control form-control-sm" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off" value="{{$dataedits->train_date_go}}"> 
                             </div> 
                         </div>
                         <div class="row mt-2">
@@ -209,14 +209,14 @@ $datenow = date('Y-m-d');
                                 <label class="form-label" for="train_title" >เรื่อง </label> 
                             </div> 
                             <div class="col-md-6">  
-                                <input type="text" class="form-control form-control-sm" id="train_title" name="train_title" >
+                                <input type="text" class="form-control form-control-sm" id="train_title" name="train_title" value="{{$dataedits->train_title}}">
                             </div> 
                            
                             <div class="col-md-2"> 
                                 <label class="form-label" for="train_date_back" >วันที่กลับ </label> 
                             </div> 
                             <div class="col-md-2">  
-                                <input type="text" id="train_date_back" class="form-control form-control-sm" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off">
+                                <input type="text" id="train_date_back" class="form-control form-control-sm" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off" value="{{$dataedits->train_date_back}}">
                             </div> 
                           
                         </div>
@@ -227,7 +227,7 @@ $datenow = date('Y-m-d');
                                 <label class="form-label" for="train_detail" >รายละเอียด </label> 
                             </div> 
                             <div class="col-md-6">  
-                                <input type="text" class="form-control form-control-sm" id="train_detail" name="train_detail" >                                 
+                                <input type="text" class="form-control form-control-sm" id="train_detail" name="train_detail" value="{{$dataedits->train_detail}}">                                 
                             </div>
                             <div class="col-md-2"> 
                                     <label class="form-label" for="train_assign_work" >มอบหมายงานให้ </label> 
@@ -235,7 +235,12 @@ $datenow = date('Y-m-d');
                             <div class="col-md-2">   
                                 <select id="train_assign_work" name="train_assign_work" class="form-control" style="width: 100%"> 
                                     @foreach ($users as $hn) 
-                                            <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option> 
+                                    @if ($dataedits->train_assign_work == $hn->id)
+                                    <option value="{{ $hn->id }}" selected>{{ $hn->fname }} {{ $hn->lname }} </option> 
+                                    @else
+                                    <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option> 
+                                    @endif
+                                           
                                     @endforeach
                                 </select> 
                             </div> 
@@ -247,13 +252,13 @@ $datenow = date('Y-m-d');
                                     <label class="form-label" for="train_detail" >ยานพาหนะ</label> 
                             </div> 
                             <div class="col-md-2">  
-                                <input type="text" class="form-control form-control-sm" id="train_vehicle" name="train_vehicle" >                          
+                                <input type="text" class="form-control form-control-sm" id="train_vehicle" name="train_vehicle" value="{{$dataedits->train_vehicle}}">                          
                             </div>
                             <div class="col-md-2"> 
                                 <label class="form-label" for="train_vehicle_pai" >ทะเบียน </label> 
                             </div> 
                             <div class="col-md-2">  
-                                <input type="text" class="form-control form-control-sm" id="train_vehicle_pai" name="train_vehicle_pai" >                          
+                                <input type="text" class="form-control form-control-sm" id="train_vehicle_pai" name="train_vehicle_pai" value="{{$dataedits->train_vehicle_pai}}">                          
                             </div>
                               <div class="col-md-2"> 
                                 <label class="form-label" for="train_head" >หัวหน้า </label> 
@@ -279,7 +284,12 @@ $datenow = date('Y-m-d');
                             <div class="col-md-6">   
                                 <select id="train_locate" name="train_locate" class="form-control show_location" style="width: 100%"> 
                                     @foreach ($train_location as $trainlocation) 
-                                            <option value="{{ $trainlocation->train_location_id }}">{{ $trainlocation->train_location_name }}</option> 
+                                    @if ($dataedits->train_locate == $trainlocation->train_location_id)
+                                    <option value="{{ $trainlocation->train_location_id }}" selected>{{ $trainlocation->train_location_name }}</option> 
+                                    @else
+                                    <option value="{{ $trainlocation->train_location_id }}">{{ $trainlocation->train_location_name }}</option> 
+                                    @endif
+                                            
                                     @endforeach
                                 </select> 
                             </div> 
@@ -307,9 +317,11 @@ $datenow = date('Y-m-d');
                                         <canvas id="the_canvas" width="340px" height="130px"></canvas>
                                     </div>
 
+                                    <input type="hidden" id="train_id" name="train_id" value="{{$dataedits->train_id}}">
                                     <input type="hidden" id="signature" name="signature">
                                     <input type="hidden" id="user_id" name="user_id" value=" {{ Auth::user()->id }}">
                                     <input type="hidden" name="store_id" id="store_id" value=" {{ Auth::user()->store_id }}">
+
                                     <button type="button" id="clear_btn"
                                         class="btn btn-secondary d-shadow btn-sm mt-2" data-action="clear"><span
                                             class="glyphicon glyphicon-remove"></span>
@@ -320,9 +332,9 @@ $datenow = date('Y-m-d');
                                         onclick="create();"><span class="glyphicon glyphicon-ok"></span>
                                         Create
                                     </button> 
-                                    <button type="button" id="SaveBtn" class="ladda-button btn-pill btn btn-success d-shadow btn-sm mt-2">
+                                    <button type="button" id="UpdateBtn" class="ladda-button btn-pill btn btn-success d-shadow btn-sm mt-2">
                                         <i class="fa-solid fa-circle-check text-white"></i>
-                                        บันทึกข้อมูล
+                                        แก้ไขข้อมูล
                                     </button>
                                     <a href="{{ url('user_train') }}" class="ladda-button btn-pill btn btn-danger d-shadow btn-sm mt-2">
                                         <i class="fa-solid fa-xmark"></i>
@@ -330,7 +342,9 @@ $datenow = date('Y-m-d');
                                     </a>
                                 </div>
                             </div> 
-
+                            <div class="col-md-2 mt-5">
+                                <img src="data:image/png;base64,{{$signature}}" alt=""> 
+                            </div>
                            
                         </div>  
                         
@@ -435,7 +449,7 @@ $datenow = date('Y-m-d');
             }
         });
 
-        $('#SaveBtn').click(function() {
+        $('#UpdateBtn').click(function() {
             var train_book_advert      = $('#train_book_advert').val();
             var train_book_no          = $('#train_book_no').val();
             var train_date_go          = $('#train_date_go').val();
@@ -447,24 +461,24 @@ $datenow = date('Y-m-d');
             var train_vehicle_pai      = $('#train_vehicle_pai').val();
             var train_head             = $('#train_head').val(); 
             var train_locate           = $('#train_locate').val();
-            // var train_expenses = $('#train_expenses').val();
+            var train_id               = $('#train_id').val();
             // var train_expenses_out = $('#train_expenses_out').val(); 
             var signature             = $('#signature').val();
             var user_id               = $('#user_id').val();
             $.ajax({
-                url: "{{ route('u.user_train_save') }}",
+                url: "{{ route('u.user_train_update') }}",
                 type: "POST",
                 dataType: 'json',
                 data: {
                     train_book_advert, train_book_no, train_date_go,train_vehicle_pai,
                     train_date_back, train_title, train_detail,signature,user_id,
-                    train_assign_work, train_vehicle,train_head,train_locate
+                    train_assign_work, train_vehicle,train_head,train_locate,train_id
                 },
                 // train_expenses,train_expenses_out,
                 success: function(data) {
                     if (data.status == 200) {
                         Swal.fire({
-                            title: 'บันทึกข้อมูลสำเร็จ',
+                            title: 'แก้ไขข้อมูลสำเร็จ',
                             text: "You Insert data success",
                             icon: 'success',
                             showCancelButton: false,
