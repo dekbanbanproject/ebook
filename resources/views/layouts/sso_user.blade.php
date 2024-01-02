@@ -7,6 +7,10 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300&family=Srisakdi&display=swap" rel="stylesheet">
+
     <!-- Font Awesome -->
     <link href="{{ asset('assets/fontawesome/css/all.css') }}" rel="stylesheet">
     <!-- App favicon -->
@@ -64,7 +68,7 @@
     <link rel="stylesheet" href="{{ asset('disacc/vendors/linearicons-master/dist/web-font/style.css') }}">
     <link rel="stylesheet"
         href="{{ asset('disacc/vendors/pixeden-stroke-7-icon-master/pe-icon-7-stroke/dist/pe-icon-7-stroke.css') }}">
-    <link href="{{ asset('disacc/styles/css/base.css') }}" rel="stylesheet">
+    {{-- <link href="{{ asset('disacc/styles/css/base.css') }}" rel="stylesheet"> --}}
     <link rel="stylesheet" href="{{ asset('css/dcss.css') }}">
 </head>
 <style>
@@ -95,12 +99,28 @@
 
 
 <body data-sidebar="white" data-keep-enlarged="true" class="vertical-collpsed">
+    <?php 
+    if (Auth::check()) {
+        $type = Auth::user()->type;
+        $iduser = Auth::user()->id;
+        $hnid = Auth::user()->hn_id;
+    } else {
+        echo "<body onload=\"TypeAdmin()\"></body>";
+        exit();
+    }
+    $url = Request::url();
+    $pos = strrpos($url, '/') + 1;
+        use App\Http\Controllers\StaticController;
+        $checkhn    = StaticController::checkhn($iduser);
+        $checkpo    = StaticController::checkpo($iduser);  
+        $checksso   = StaticController::checksso($iduser); 
+    ?>
 
     <!-- Begin page -->
     <div id="layout-wrapper">
 
         <header id="page-topbar">
-            <div class="navbar-header shadow" style="background-color: rgba(23, 189, 147, 0.74)">
+            <div class="navbar-header" style="background-color: rgba(13, 160, 123, 0.884)">
 
                 <div class="d-flex">
                     <!-- LOGO -->
@@ -130,7 +150,7 @@
                         id="vertical-menu-btn">
                         <i class="ri-menu-2-line align-middle" style="color: rgb(255, 255, 255)"></i>
                     </button>
-                    <a href="{{ url('plan') }}">
+                    <a href="{{ url('/') }}">
                         <h4 style="color:rgb(255, 255, 255)" class="mt-4">U-Ebook</h4>
                     </a>
  
@@ -138,6 +158,19 @@
 
                 <div class="d-flex">
                     <div class="dropdown d-none d-lg-inline-block ms-1">
+
+                        {{-- @if ($checkpo != 0)
+                        <a href="{{url("user_train_hn")}}" target="_blank">
+                            <i class="fa-solid fa-user-group text-warning ms-4 me-2" data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="ผอ."></i>
+                          </a>
+                          @endif --}}
+
+                          {{-- @if ($checksso != 0)
+                          <a href="{{url("user_train_sso")}}" target="_blank">
+                            <i class="fa-solid fa-user-group text-danger ms-4 me-2" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-title="สสอ."></i>
+                          </a>
+                          @endif --}}
+
                         <button type="button" class="btn header-item noti-icon waves-effect"
                             data-toggle="fullscreen">
                             <i class="ri-fullscreen-line" style="color: rgb(54, 53, 53)"></i>

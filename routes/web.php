@@ -44,5 +44,19 @@ Route::match(['get','post'],'user_train_update',[App\Http\Controllers\TrainContr
 
 Route::match(['get','post'],'addlocation',[App\Http\Controllers\TrainController::class, 'addlocation'])->name('u.addlocation');//
 
+//หัวหน้า
+Route::match(['get','post'],'user_train_hn',[App\Http\Controllers\TrainController::class, 'user_train_hn'])->name('u.user_train_hn');//
+
+//ผอ
+Route::match(['get','post'],'user_train_po',[App\Http\Controllers\PoController::class, 'user_train_po'])->name('u.user_train_po');//
+Route::match(['get','post'],'user_train_poedit/{id}',[App\Http\Controllers\PoController::class, 'user_train_poedit'])->name('u.user_train_poedit');//
+Route::match(['get','post'],'user_train_poupdate',[App\Http\Controllers\PoController::class, 'user_train_poupdate'])->name('u.user_train_poupdate');//
+Route::match(['get','post'],'user_train_poupdate_no',[App\Http\Controllers\PoController::class, 'user_train_poupdate_no'])->name('u.user_train_poupdate_no');//
+
+//สสอ.
+Route::match(['get','post'],'user_train_sso',[App\Http\Controllers\SSOController::class, 'user_train_sso'])->name('u.user_train_sso');//
+Route::match(['get','post'],'user_train_sso_approve',[App\Http\Controllers\SSOController::class, 'user_train_sso_approve'])->name('u.user_train_sso_approve');//
+Route::match(['get','post'],'user_train_sso_noapprove',[App\Http\Controllers\SSOController::class, 'user_train_sso_noapprove'])->name('u.user_train_sso_noapprove');//
+
 });
 

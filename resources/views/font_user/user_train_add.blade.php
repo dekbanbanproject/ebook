@@ -475,9 +475,8 @@ $datenow = date('Y-m-d');
                                 .isConfirmed) {
                                 console.log(
                                     data);
-
-                                window.location
-                                    .reload();
+                                    window.location="{{url('user_train')}}";
+                                // window.location.reload();
                             }
                         })
                     } else if (data.status == 50) {

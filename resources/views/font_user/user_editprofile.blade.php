@@ -299,18 +299,18 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-3">
                                     <div class="mb-3">
                                         <label class="form-label" for="line_token">Line Token</label>
-                                        <textarea id="line_token" name="line_token" class="form-control" rows="2">{{ $dataedits->line_token }}</textarea>
+                                        <input type="text" name="line_token" id="line_token" class="form-control form-control-sm">
+                                        {{-- <textarea id="line_token" name="line_token" class="form-control" rows="2">{{ $dataedits->line_token }}</textarea> --}}
                                     </div>
                                 </div>
-                                <div class="col-lg-6">
+                                <div class="col-lg-3">
                                     <div class="mb-3">
                                         <label class="form-label" for="hn_id">หัวหน้า</label>
                                         <select id="hn_id" name="hn_id" class="form-control"
-                                            style="width: 100%">
-                                            {{-- <option value=""></option> --}}
+                                            style="width: 100%"> 
                                             @foreach ($users as $hn)
                                                 @if ($dataedits->hn_id == $hn->id)
                                                     <option value="{{ $hn->id }}" selected> {{ $hn->fname }} {{ $hn->lname }} </option>
@@ -318,8 +318,37 @@
                                                     <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option>
                                                 @endif
                                             @endforeach
-                                        </select>
-                                       
+                                        </select>                                       
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="po_id">ผอ.</label>
+                                        <select id="po_id" name="po_id" class="form-control"
+                                            style="width: 100%"> 
+                                            @foreach ($users as $po)
+                                                @if ($dataedits->po_id == $po->id)
+                                                    <option value="{{ $po->id }}" selected> {{ $po->fname }} {{ $po->lname }} </option>
+                                                @else
+                                                    <option value="{{ $po->id }}">{{ $po->fname }} {{ $po->lname }} </option>
+                                                @endif
+                                            @endforeach
+                                        </select>                                       
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="mb-3">
+                                        <label class="form-label" for="sso_id">สสอ.</label>
+                                        <select id="sso_id" name="sso_id" class="form-control"
+                                            style="width: 100%"> 
+                                            @foreach ($users as $sso)
+                                                @if ($dataedits->sso_id == $sso->id)
+                                                    <option value="{{ $sso->id }}" selected> {{ $sso->fname }} {{ $sso->lname }} </option>
+                                                @else
+                                                    <option value="{{ $sso->id }}">{{ $sso->fname }} {{ $sso->lname }} </option>
+                                                @endif
+                                            @endforeach
+                                        </select>                                       
                                     </div>
                                 </div>
                             </div>
@@ -368,6 +397,14 @@
                         allowClear: true
                     });
                     $('#hn_id').select2({
+                        placeholder: "--เลือก--",
+                        allowClear: true
+                    });
+                    $('#po_id').select2({
+                        placeholder: "--เลือก--",
+                        allowClear: true
+                    });
+                    $('#sso_id').select2({
                         placeholder: "--เลือก--",
                         allowClear: true
                     });

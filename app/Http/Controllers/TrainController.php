@@ -71,9 +71,8 @@ class TrainController extends Controller
                     WHERE t.train_date_go BETWEEN "'.$newDate.'" and "'.$date.'"
                 
             '); 
-        }
-        
-               
+        }   
+           
         return view('font_user.user_train',$data,[
             'startdate'     =>     $startdate,
             'enddate'       =>     $enddate,
@@ -125,8 +124,12 @@ class TrainController extends Controller
         
     public function user_train_save(Request $request)
     { 
-        $date =  date('Y-m-d');
-        $add_img = $request->input('signature'); 
+        $date        =  date('Y-m-d');
+        $add_img     = $request->input('signature');  
+        $sige_id      = User::where('id','=',$request->train_assign_work)->first();
+        $head_id      = User::where('id','=',$request->train_head)->first();
+        $locate_id    = Train_location::where('train_location_id','=',$request->train_locate)->first();
+        
         if ($add_img != '') {
             Train::insert([ 
                 'train_book_advert'        => $request->train_book_advert, 
@@ -135,14 +138,22 @@ class TrainController extends Controller
                 'train_date_back'          => $request->train_date_back,
                 'train_title'              => $request->train_title, 
                 'train_detail'             => $request->train_detail,
+
                 'train_assign_work'        => $request->train_assign_work,
+                'train_assign_work_name'   => $sige_id->fname. '  '.$sige_id->lname,
+
                 'train_vehicle'            => $request->train_vehicle,
                 'train_vehicle_pai'        => $request->train_vehicle_pai,
+
                 'train_head'               => $request->train_head, 
+                'train_head_name'          => $head_id->fname. '  '.$head_id->lname,
+
                 'train_date'               => $date, 
+               
                 'train_locate'             => $request->train_locate, 
-                'user_id'                  => $request->user_id,
-                // 'train_expenses_out'       => $request->train_expenses_out,
+                'train_locate_name'        => $locate_id->train_location_name,
+
+                'user_id'                  => $request->user_id, 
                 'train_signature'          => $add_img,
             ]);  
             return response()->json([
@@ -187,6 +198,9 @@ class TrainController extends Controller
         $date         =  date('Y-m-d');
         $add_img      = $request->input('signature'); 
         $train_id     = $request->input('train_id'); 
+        $sige_id      = User::where('id','=',$request->train_assign_work)->first();
+        $head_id      = User::where('id','=',$request->train_head)->first();
+        $locate_id    = Train_location::where('train_location_id','=',$request->train_locate)->first();
 
         if ($add_img != '') {
             Train::where('train_id',$train_id)->update([ 
@@ -196,14 +210,22 @@ class TrainController extends Controller
                 'train_date_back'          => $request->train_date_back,
                 'train_title'              => $request->train_title, 
                 'train_detail'             => $request->train_detail,
+
                 'train_assign_work'        => $request->train_assign_work,
+                'train_assign_work_name'   => $sige_id->fname. '  '.$sige_id->lname,
+
                 'train_vehicle'            => $request->train_vehicle,
                 'train_vehicle_pai'        => $request->train_vehicle_pai,
+
                 'train_head'               => $request->train_head, 
+                'train_head_name'          => $head_id->fname. '  '.$head_id->lname,
+
                 'train_date'               => $date, 
+
                 'train_locate'             => $request->train_locate, 
-                'user_id'                  => $request->user_id,
-                // 'train_expenses_out'       => $request->train_expenses_out,
+                'train_locate_name'        => $locate_id->train_location_name,
+
+                'user_id'                  => $request->user_id, 
                 'train_signature'          => $add_img,
             ]);  
             return response()->json([
@@ -218,21 +240,5 @@ class TrainController extends Controller
                          
     }
 
-    // public function password_update(Request $request)
-    // {
-    //     $idper =  Auth::user()->id;
-        
-    //     $update = User::find($idper);
-
-    //     $update->password = Hash::make($request->password);
-        
-    //     $update->save();
-
-    //     return response()->json([
-    //         'status'     => '200'
-    //     ]);
-        
-    
-        
-    // }
+ 
 }

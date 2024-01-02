@@ -1,6 +1,9 @@
 @extends('layouts.sso_user')
 @section('title', 'd-ebook || sso')
 @section('content')
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Srisakdi:wght@400;700&display=swap" rel="stylesheet">
 <script>
     function TypeAdmin() {
         window.location.href = '{{ route('index') }}';
@@ -18,6 +21,10 @@ $url = Request::url();
 $pos = strrpos($url, '/') + 1;
 $ynow = date('Y') + 543;
 $yb = date('Y') + 542;
+use App\Http\Controllers\StaticController;
+        $checkhn    = StaticController::checkhn($iduser);
+        $checkpo    = StaticController::checkpo($iduser);  
+        $checksso   = StaticController::checksso($iduser);
 ?>
 
 <style>
@@ -116,6 +123,15 @@ $yb = date('Y') + 542;
         border-radius: 20 20 10 10;
         box-shadow: 0 0 10px teal;
     }
+    .Head1{
+			font-family: 'Srisakdi', sans-serif;
+            font-size: 17px;
+            /* font-style: normal; */
+          font-weight: 700;
+		}
+        .detail{
+            font-size: 13px;
+        }
 </style>
   
 <div class="tabs-animation">
@@ -135,24 +151,77 @@ $yb = date('Y') + 542;
     <div class="container-fluid">
         <!-- start page title -->
         <div class="row">
-            <div class="col-12">
+            <div class="col-md-4">
+                <h4 class="mb-sm-0">Main Ebook</h4>
+            </div>
+            <div class="col"></div>
+            <div class="col-md-3 text-end">
+                {{-- <a href="" class="ladda-button btn-pill btn btn-info d-shadow"> --}}
+                {{-- <a href="" class="btn btn-info btn-rounded btn-sm waves-effect waves-light d-shadow">
+                    <span class="ladda-label"> 
+                        <i class="fa-solid fa-user-group text-white me-3 ms-3"></i>
+                        <label for="" style="color: white;font-size:20px;" class="me-3 Head1">ผอ.</label>
+                    </span> 
+                </a> 
+                <a href="" class="btn btn-primary btn-rounded btn-sm waves-effect waves-light d-shadow">
+                    <span class="ladda-label">
+                         <i class="fa-solid fa-user-group text-white me-3 ms-3"></i>
+                        <label for="" style="color: white;font-size:20px;" class="me-3 Head1">สสอ.</label>
+                    </span> 
+                </a>  --}}
+                {{-- <a href="{{url('user_train_po')}}" class="btn btn-info btn-rounded btn-sm waves-effect waves-light"><i class="fa-solid fa-user-group text-white me-2 ms-2"></i>
+                    <label for="" style="color: white;" class="me-3 Head1">ผอ.</label>
+                </a>
+                <a href="{{url('user_train_sso')}}" class="btn btn-primary btn-rounded btn-sm waves-effect waves-light"><i class="fa-solid fa-user-group text-white me-2 ms-2"></i>
+                    <label for="" style="color: white;" class="me-3 Head1">สสอ.</label>
+                </a> --}}
+                @if ($checkpo != 0)
+                    <a href="{{url('user_train_po')}}" class="ladda-button btn-pill btn btn-primary d-shadow me-2">
+                        <span class="ladda-label"><i class="fa-solid fa-user-group text-white me-2"></i> PO </span>
+                        <span class="ladda-spinner"></span> 
+                    </a>
+                @endif
+                @if ($checksso != 0)
+                    <a href="{{ url('user_train_sso') }}" class="ladda-button btn-pill btn btn-danger d-shadow">
+                        <i class="fa-solid fa-user-group me-2"></i>
+                        SSO
+                    </a>
+                @endif
+            </div>
+            
+            {{-- <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
                     <h4 class="mb-sm-0">Main Ebook</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
-                            <li class="breadcrumb-item"><a href="javascript: void(0);">Main Ebook</a></li>
-                            <li class="breadcrumb-item active">Ebook</li>
+                            <li class="breadcrumb-item"> 
+                                <a href="" class="ladda-button btn-pill btn btn-info d-shadow">
+                                    <span class="ladda-label"> <i class="fa-solid fa-user-group text-white me-3 ms-3"></i>
+                                        <label for="" style="color: white;font-size:20px;" class="me-3 Head1">ผอ.</label>
+                                    </span> 
+                                </a> 
+                            </li>
+                             
+                            <li class="breadcrumb-item">
+                                <a href="" class="ladda-button btn-pill btn btn-primary d-shadow">
+                                    <span class="ladda-label">
+                                         <i class="fa-solid fa-user-group text-white me-3 ms-3"></i>
+                                        <label for="" style="color: white;font-size:20px;" class="me-3 Head1">สสอ.</label>
+                                    </span> 
+                                </a> 
+                            </li>
                         </ol>
                     </div>
 
                 </div>
-            </div>
+            </div> --}}
+
         </div>
         <!-- end page title -->
     </div> <!-- container-fluid -->
 
-        <form action="{{ url('main_user') }}" method="GET">
+        {{-- <form action="{{ url('main_user') }}" method="GET">
             @csrf
         <div class="row">  
             <div class="col"></div>
@@ -170,18 +239,14 @@ $yb = date('Y') + 542;
                 </div> 
             </div>
         </div>      
-        </form>
-
-
-       
+        </form> --}}
  
-
     <div class="row mt-3">
         <div class="col-xl-12">
             <div class="card cardshadow">
                 <div class="card-body">  
                     <p class="mb-0">
-                        <div class="table-responsive">
+                        {{-- <div class="table-responsive">
                             <table id="example" class="table table-hover table-sm dt-responsive nowrap"
                             style=" border-spacing: 0; width: 100%;">
                                 <thead>
@@ -200,23 +265,11 @@ $yb = date('Y') + 542;
                                         <th class="text-center">before</th> 
                                     </tr>
                                 </thead>
-                                {{-- <tbody>
-                                    <?php $i = 1; ?>
-                                    @foreach ($datashow as $item) 
-                                        <tr id="tr_{{$item->a_stm_ct_id}}">                                                  
-                                            <td class="text-center" width="5%">{{ $i++ }}</td>    
-                                            <td class="text-center" width="5%">{{ $item->vn }}</td> 
-                                            <td class="text-center" width="5%">{{ $item->hn }}</td>  
-                                            <td class="text-center" width="10%">{{ $item->cid }}</td>  
-                                            <td class="p-2" >{{ $item->ptname }}</td>  
-                                            <td class="text-center" style="color:rgb(216, 95, 14)" width="5%">{{ $item->ptty_spsch }}</td>  
-                                            <td class="text-center" width="10%">{{ number_format($item->price_check, 2) }}</td>  
-                                        </tr>
- 
-                                    @endforeach
-                                </tbody> --}}
+                                <tbody>
+                                   
+                                </tbody>
                             </table>
-                        </div>
+                        </div> --}}
                     </p>
                 </div>
             </div>

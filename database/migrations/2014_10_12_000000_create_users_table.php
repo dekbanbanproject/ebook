@@ -100,6 +100,7 @@ return new class extends Migration
             $table->string('hn_id')->nullable(); 
             $table->string('head_group_id')->nullable(); 
             $table->string('po_id')->nullable(); 
+            $table->string('sso_id')->nullable(); 
             $table->rememberToken();
             $table->timestamps();
         });

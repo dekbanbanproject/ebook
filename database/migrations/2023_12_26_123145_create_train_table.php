@@ -21,21 +21,25 @@ return new class extends Migration
                 $table->string('train_title',255)->nullable();       // เรื่อง
                 $table->string('train_obj',255)->nullable();       // ัตถุประสงค์
                 $table->string('train_locate',255)->nullable();       // สถานที่ไป
+                $table->string('train_locate_name',255)->nullable(); 
                 $table->string('train_detail',255)->nullable();     //  รายละเอียด :
                 $table->date('train_date_go',255)->nullable();  //วันที่ไป
                 $table->date('train_date_back',255)->nullable();  //วันที่กลับ
                 $table->string('train_vehicle',255)->nullable();       // ยานพาหนะที่ใช้ 
                 $table->string('train_vehicle_pai',255)->nullable();       //
                 $table->string('train_assign_work',255)->nullable();  //มอบหมายงายนให้
+                $table->string('train_assign_work_name',255)->nullable();
                 $table->string('train_head',255)->nullable();  //หัวหน้า
+                $table->string('train_head_name',255)->nullable();
                 $table->string('train_expenses',255)->nullable();  //เบิกค่าใช้จ่าย
                 $table->string('train_expenses_out',255)->nullable();  //เบิกค่าใช้จ่ายจากผู้จัด
                 // $table->enum('train_expenses', ['Y', 'N', 'W'])->default('N');  //เบิกค่าใช้จ่าย
                 $table->longtext('train_signature',255)->nullable(); 
                 $table->longtext('train_signature_hn',255)->nullable(); 
                 $table->longtext('train_signature_po',255)->nullable(); 
+                $table->longtext('train_signature_sso',255)->nullable(); 
                 $table->string('user_id',255)->nullable(); 
-                $table->enum('train_active', ['REQ', 'AGREE', 'APPROVE', 'CANCEL', 'CONFIRM_CANCEL'])->default('REQ');
+                $table->enum('train_active', ['REQ', 'AGREE', 'APPROVE', 'CANCEL', 'CONFIRM_CANCEL', 'NOAGREE', 'NOAPPROVE'])->default('REQ');
                 $table->timestamps();
             });
         }

@@ -68,12 +68,12 @@ $yb = date('Y') + 542;
         }
 
         .modal-dialog {
-            max-width: 50%;
+            max-width: 70%;
         }
 
         .modal-dialog-slideout {
             min-height: 100%;
-            margin:auto 0 0 0 ;   /*  ซ้าย ขวา */
+            margin:0 0 0 auto;   /*  ซ้าย ขวา */
             background: #fff;
         }
 
@@ -158,22 +158,14 @@ $yb = date('Y') + 542;
         <!-- end page title -->
     </div> <!-- container-fluid -->
 
-        <form action="{{ url('user_train') }}" method="GET">
+        <form action="{{ url('user_train_po') }}" method="GET">
             @csrf
         <div class="row">  
-            <div class="col-md-3 text-start">
-                {{-- <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="modal" data-bs-target="#MyModal" data-bs-toggle="tooltip" data-bs-placement="right" title="ขอไปราชการ"> 
-                    <i class="fas fa-book-reader me-2"></i> 
-                    ยื่นเรื่อง
-                </button> --}}
-                <a href="{{url('user_train_add')}}" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="tooltip" data-bs-placement="right" title="ยื่นเรื่องขอไปราชการ"> 
-                    <i class="fas fa-book-reader me-2"></i> 
-                    ยื่นเรื่องขอไปราชการ
-                </a>
+            <div class="col-md-3 text-start"> 
             </div>
             <div class="col"></div>
             <div class="col-md-1 text-end mt-2">วันที่</div>
-            <div class="col-md-4 text-end">
+            <div class="col-md-5 text-end">
                 <div class="input-daterange input-group" id="datepicker1" data-date-format="dd M, yyyy" data-date-autoclose="true" data-provide="datepicker" data-date-container='#datepicker1'>
                     <input type="text" class="form-control d-shadow" name="startdate" id="datepicker" placeholder="Start Date" data-date-container='#datepicker1' data-provide="datepicker" data-date-autoclose="true" autocomplete="off"
                         data-date-language="th-th" value="{{ $startdate }}" required/>
@@ -203,30 +195,45 @@ $yb = date('Y') + 542;
                                 <thead>
                                     <tr> 
                                         <th width="5%" class="text-center">ลำดับ</th>  
-                                        <th class="text-center">หนังสืออ้างอิง</th>
+                                        {{-- <th class="text-center">หนังสืออ้างอิง</th> --}}
+                                        <th class="text-center" >สถานะ</th>
                                         <th class="text-center" >เลขที่หนังสือ</th>
-                                        <th class="text-center" >เรื่อง</th>
-                                        {{-- <th class="text-center">หน่วยงานที่จัด</th>  --}}
+                                        <th class="text-center" >เรื่อง</th> 
                                         <th class="text-center">วันที่ไป</th>  
-                                        <th class="text-center">ถึงวันที่</th> 
-                                        {{-- <th class="text-center">พาหนะ</th> --}}
-                                        {{-- <th class="text-center">หัวหน้า</th>   --}}
-                                        <th class="text-center">มอบหมายงายนให้</th> 
+                                        <th class="text-center">ถึงวันที่</th>  
+                                        {{-- <th class="text-center">มอบหมายงายนให้</th>  --}}
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $i = 1; ?>
                                     @foreach ($train as $item) 
-                                    
+                                    {{-- <span class="badge rounded-pill badge-soft-warning">Warning</span> --}}
                                         <tr id="tr_{{$item->train_id}}" >                                                  
                                             <td class="text-center" width="5%">{{ $i++ }}</td>    
-                                            <td class="text-center" width="5%">{{ $item->train_book_advert }}</td> 
-                                            <td class="text-center" width="5%"><a href="{{url('user_train_edit/'.$item->train_id)}}">{{ $item->train_book_no }} </a></td>  
+                                            {{-- <td class="text-center" width="5%">{{ $item->train_book_advert }}</td>  --}}
+                                            {{-- <span class="badge rounded-pill badge-soft-warning">Warning</span> --}}
+                                            <td class="text-center" width="5%">
+                                                @if ($item->train_active == 'REQ')
+                                                    <span class="badge rounded-pill badge-soft-warning" style="font-size:15px">ร้องขอ</span> 
+                                                @elseif ($item->train_active == 'AGREE')
+                                                    <span class="badge rounded-pill badge-soft-primary" style="font-size:15px">เห็นชอบ</span> 
+                                                @elseif ($item->train_active == 'APPROVE')
+                                                    <span class="badge rounded-pill badge-soft-success" style="font-size:15px">อนุมัติ</span> 
+                                                @else
+                                                    <span class="badge rounded-pill badge-soft-danger" style="font-size:15px">ยกเลิก</span> 
+                                                @endif
+                                                
+                                            </td>
+                                            <td class="text-center" width="5%">
+                                                {{-- data-bs-toggle="modal" data-bs-target="#MyModal" --}}
+                                                <button type="button" class="ladda-button btn-pill btn btn-secondary btn-sm d-shadow me-2 MoneyModal_" value="{{ $item->train_id }}" >
+                                                    {{ $item->train_book_no }} 
+                                                </button>
+                                            </td>  
                                             <td class="p-2">{{ $item->train_title }}</td>  
                                             <td class="text-center" width="8%">{{ $item->train_date_go }}</td> 
-                                            <td class="text-center" width="8%">{{ $item->train_date_back }}</td> 
-                                            {{-- <td class="text-center" width="10%">{{ $item->train_vehicle }}</td>  --}}
-                                            <td class="text-center" width="10%">{{ $item->fname }} {{ $item->lname }}</td>   
+                                            <td class="text-center" width="8%">{{ $item->train_date_back }}</td>  
+                                            {{-- <td class="text-center" width="10%">{{ $item->fname }} {{ $item->lname }}</td>    --}}
                                         </tr>
                                  
                                     @endforeach
@@ -246,13 +253,16 @@ $yb = date('Y') + 542;
     <div class="modal-content">
         <div class="modal-header">
             <div class="row"> 
-                <div class="col-md-8">
-                    <h5 class="modal-title" id="InsertModalLabel">ยื่นเรื่อง</h5>
+                <div class="col-md-3">
+                    <h5 class="modal-title" id="InsertModalLabel">เห็นชอบ ขอไปราชการ</h5>
                 </div>
-                <div class="col-md-4 text-end">
+                <div class="col-md-9 text-end">
                     <div class="form-group">
-                        <button type="button" id="SaveBtn" class="btn-icon btn-shadow btn-dashed btn btn-outline-info me-2"> 
-                            <i class="pe-7s-diskette btn-icon-wrapper me-2"></i> Save
+                        <button type="button" id="UpdateBtn" class="btn-icon btn-shadow btn-dashed btn btn-outline-info"> 
+                            <i class="pe-7s-diskette btn-icon-wrapper me-2"></i> เห็นชอบ
+                        </button>
+                        <button type="button" id="UpdateNoBtn" class="btn-icon btn-shadow btn-dashed btn btn-outline-primary"> 
+                            <i class="pe-7s-diskette btn-icon-wrapper me-2"></i> ไม่เห็นชอบ
                         </button>
                         <button type="button" class="btn-icon btn-shadow btn-dashed btn btn-outline-danger" data-bs-dismiss="modal">
                             <i class="fa-solid fa-xmark me-2"></i>Close
@@ -261,39 +271,25 @@ $yb = date('Y') + 542;
                 </div>
             </div>
         </div>
-        <div class="modal-body">
-            <div class="row">
-                {{-- <div class="col-md-9"> 
-                    <div class="mb-3">
-                        <label class="form-label" for="train_book_advert" >หนังสืออ้างอิง :</label>
-                        <input type="text" class="form-control form-control-sm" id="train_book_advert" name="train_book_advert" >
-                    </div>
-                </div> --}}
-                {{-- <div class="col-md-3 mt-4">  
-                        <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="modal" data-bs-target="#MyModal" data-bs-toggle="tooltip" data-bs-placement="right" title="ขอไปราชการ"> 
-                            <i class="fas fa-book-reader me-2"></i> 
-                            หนังสืออ้างอิง
-                        </button> 
-                </div> --}}
-            </div>
+        <div class="modal-body"> 
             <div class="row">
                 <div class="col-md-3"> 
                     <div class="mb-3">
                         <label class="form-label" for="train_book_advert" >หนังสืออ้างอิง :</label>
-                        <input type="text" class="form-control form-control-sm" id="train_book_advert" name="train_book_advert" >
+                        <input type="text" class="form-control form-control-sm" id="updatetrain_book_advert" name="train_book_advert" >
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label class="form-label" for="train_book_no" >เลขที่หนังสือ :</label>
-                        <input type="text" class="form-control form-control-sm" id="train_book_no" name="train_book_no" >
+                        <input type="text" class="form-control form-control-sm" id="updatetrain_book_no" name="train_book_no" >
                     </div>
                 </div> 
                 <div class="col-md-3">
                     <div class="mb-3">
                         <label class="form-label" for="train_date_go" >วันที่ไป :</label> 
                         <div class="input-group input-group-sm">  
-                            <input type="text" id="train_date_go" class="form-control" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off">
+                            <input type="text" id="updatetrain_date_go" class="form-control" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -301,7 +297,7 @@ $yb = date('Y') + 542;
                     <div class="mb-3">
                         <label class="form-label" for="train_date_back" >วันที่กลับ :</label> 
                         <div class="input-group input-group-sm">  
-                            <input type="text" id="train_date_back" class="form-control" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off">
+                            <input type="text" id="updatetrain_date_back" class="form-control" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off">
                         </div>
                     </div>
                 </div>
@@ -310,7 +306,7 @@ $yb = date('Y') + 542;
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label class="form-label" for="train_book_no" >เรื่อง :</label>
-                        <input type="text" class="form-control form-control-sm" id="train_title" name="train_title" >
+                        <input type="text" class="form-control form-control-sm" id="updatetrain_title" name="train_title" >
                     </div>
                 </div> 
             </div>
@@ -318,7 +314,7 @@ $yb = date('Y') + 542;
                 <div class="col-md-12">
                     <div class="mb-3">
                         <label class="form-label" for="train_detail" >รายละเอียด :</label>
-                        <textarea class="form-control form-control-sm" rows="3" id="train_detail" name="train_detail"></textarea>
+                        <textarea class="form-control form-control-sm" rows="3" id="updatetrain_detail" name="train_detail"></textarea>
                         
                     </div>
                 </div> 
@@ -326,8 +322,8 @@ $yb = date('Y') + 542;
             <div class="row">
                 <div class="col-md-12">
                     <div class="mb-3">
-                        <label class="form-label" for="train_locate" >สถานที่จัด :</label> 
-                        <input type="text" class="form-control form-control-sm" id="train_locate" name="train_locate" >
+                        <label class="form-label" for="train_locate_name" >สถานที่จัด :</label> 
+                        <input type="text" class="form-control form-control-sm" id="updatetrain_locate_name" name="train_locate_name" >
                     </div>
                 </div> 
                  
@@ -336,18 +332,14 @@ $yb = date('Y') + 542;
                 <div class="col-md-4">
                     <div class="mb-3">
                         <label class="form-label" for="train_assign_work" >มอบหมายงานให้ :</label> 
-                        <select id="train_assign_work" name="train_assign_work" class="form-control" style="width: 100%"> 
-                            @foreach ($users as $hn) 
-                                    <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option> 
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control form-control-sm" id="updatetrain_assign_work" name="train_assign_work" > 
                     </div>
                 </div> 
                 <div class="col-md-4">
                     <div class="mb-3">
                         <label class="form-label" for="train_vehicle" >ยานพาหนะที่ใช้ :</label> 
                         <div class="input-group input-group-sm">  
-                            <input type="text" class="form-control form-control-sm" id="train_vehicle" name="train_vehicle" >
+                            <input type="text" class="form-control form-control-sm" id="updatetrain_vehicle" name="train_vehicle" >
                         </div>
                     </div>
                 </div>
@@ -355,57 +347,50 @@ $yb = date('Y') + 542;
                     <div class="mb-3">
                         <label class="form-label" for="train_head" >หัวหน้า :</label> 
                         <div class="input-group input-group-sm">   
-                            <select id="train_head" name="train_head" class="form-control" style="width: 100%"> 
-                            @foreach ($users as $hn)
-                                @if ($hnid == $hn->id)
-                                    <option value="{{ $hn->id }}" selected> {{ $hn->fname }} {{ $hn->lname }} </option>
-                                @else
-                                    <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option>
-                                @endif
-                            @endforeach
+                            <input type="text" class="form-control form-control-sm" id="updatetrain_head" name="train_head" > 
+                            
                         </select>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row"> 
+            </div>   
+            
+            <div class="row mt-2">  
                 <div class="col"></div>
-                <div class="col-md-4">
-                    {{-- <div class="mb-3">
-                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses" id="train_expenses" checked>
-                        <label class="form-check-label mt-2" for="train_expenses">
-                            เบิกค่าใช้จ่าย
-                        </label>
-                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses" id="train_expenses2">
-                        <label class="form-check-label mt-2" for="train_expenses2">
-                            ไม่เบิกค่าใช้จ่าย
-                        </label>
-                        
-                    </div> --}}
+                {{-- <div class="col-md-3">
+                    <label class="form-label" for="signature" >Signature </label> 
+                </div>  --}}
+                <div class="col-md-5 text-center">
+                    <h3 class="mt-1 text-center">Digital Signature</h3>
+                    <div id="signature-pad" class="mt-3 text-center">
+                        <div style="border:solid 1px teal;height:130px;width:340px;">
+                            <div id="note" onmouseover="my_function();" class="text-center">The
+                                signature should be inside box</div>
+                            <canvas id="the_canvas" width="340px" height="130px"></canvas>
+                        </div>
+
+                        <input type="hidden" id="signature" name="signature">
+                        <input type="hidden" id="user_id" name="user_id" value=" {{ Auth::user()->id }}">
+                        <input type="hidden" name="store_id" id="store_id" value=" {{ Auth::user()->store_id }}">
+                        <button type="button" id="clear_btn"
+                            class="btn btn-secondary d-shadow btn-sm mt-2" data-action="clear"><span
+                                class="glyphicon glyphicon-remove"></span>
+                            Clear
+                        </button>
+                        <button type="button" id="save_btn"
+                            class="btn btn-info d-shadow btn-sm mt-2 text-white" data-action="save-png"
+                            onclick="create();"><span class="glyphicon glyphicon-ok"></span>
+                            Create
+                        </button> 
+                         
+                    </div>
                 </div> 
-                {{-- <div class="col-md-4">
-                    <div class="mb-3"> 
-                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses_out" id="train_expenses_out" >
-                        <label class="form-check-label mt-2" for="train_expenses_out">
-                            เบิกค่าใช้จ่ายจากผู้จัด
-                        </label>
-                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses_out" id="train_expenses_out2">
-                        <label class="form-check-label mt-2" for="train_expenses_out2">
-                            ไม่เบิกค่าใช้จ่ายจากผู้จัด
-                        </label>
-                    </div>
-                </div>  --}}
-                {{-- <div class="col-md-4">
-                    <div class="mb-3"> 
-                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses_n" id="train_expenses" value="N">
-                        <label class="form-check-label mt-2" for="train_expenses_n">
-                            ไม่เบิกค่าใช้จ่าย
-                        </label>
-                    </div>
-                </div>  --}}
                 <div class="col"></div>
-            </div>  
+               
+            </div> 
+
         </div>
+        <input type="hidden" class="form-control form-control-sm" id="update_train_id" name="update_train_id" >
         <div class="modal-footer">
         </div>
     </div>
@@ -414,6 +399,53 @@ $yb = date('Y') + 542;
  
 @endsection
 @section('footer')
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+<script src="{{ asset('js/gcpdfviewer.js') }}"></script>
+<script>
+    var wrapper = document.getElementById("signature-pad");
+    var clearButton = wrapper.querySelector("[data-action=clear]");
+    var savePNGButton = wrapper.querySelector("[data-action=save-png]");
+    var canvas = wrapper.querySelector("canvas");
+    var el_note = document.getElementById("note");
+    var signaturePad;
+    signaturePad = new SignaturePad(canvas);
+    clearButton.addEventListener("click", function(event) {
+        document.getElementById("note").innerHTML = "The signature should be inside box";
+        signaturePad.clear();
+    });
+    savePNGButton.addEventListener("click", function(event) {
+        if (signaturePad.isEmpty()) {
+            // alert("Please provide signature first.");
+            Swal.fire(
+                'กรุณาลงลายเซนต์ก่อน !',
+                'You clicked the button !',
+                'warning'
+            )
+            event.preventDefault();
+        } else {
+            var canvas = document.getElementById("the_canvas");
+            var dataUrl = canvas.toDataURL();
+            document.getElementById("signature").value = dataUrl;
+
+            // ข้อความแจ้ง
+            Swal.fire({
+                title: 'สร้างสำเร็จ',
+                text: "You create success",
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonColor: '#06D177',
+                confirmButtonText: 'เรียบร้อย'
+            }).then((result) => {
+                if (result.isConfirmed) {}
+            })
+        }
+    });
+
+    function my_function() {
+        document.getElementById("note").innerHTML = "";
+    }
+     
+</script>
 <script>
     $(document).ready(function() {
         $('#example').DataTable();
@@ -441,36 +473,88 @@ $yb = date('Y') + 542;
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+ 
 
-            $('#SaveBtn').click(function() {
-                var train_book_advert = $('#train_book_advert').val();
-                var train_book_no = $('#train_book_no').val();
-                var train_date_go = $('#train_date_go').val();
-                var train_date_back = $('#train_date_back').val();
-                var train_title = $('#train_title').val();
-                var train_detail = $('#train_detail').val();
-                var train_assign_work = $('#train_assign_work').val();
-                var train_vehicle = $('#train_vehicle').val();
-                var train_head = $('#train_head').val();
-                var train_locate = $('#train_locate').val();
-                var train_expenses = $('#train_expenses').val();
-                var train_expenses_out = $('#train_expenses_out').val();
-                // var train_expenses_n = $('#train_expenses_n').val();
-                // alert(train_expenses);
+            $(document).on('click', '.MoneyModal_', function() {
+                var train_id = $(this).val();
+                $('#train_date_go').datepicker();
+                $('#train_date_back').datepicker();
+                // alert(train_id);
+                $('#MyModal').modal('show');
+                
                 $.ajax({
-                    url: "{{ route('u.user_train_save') }}",
+                    type: "GET",
+                    url: "{{ url('user_train_poedit') }}" + '/' + train_id,
+                    success: function(data) { 
+                        $('#update_train_id').val(data.data_show.train_id)
+                        $('#updatetrain_book_advert').val(data.data_show.train_book_advert)
+                        $('#updatetrain_book_no').val(data.data_show.train_book_no)
+                        $('#updatetrain_locate_name').val(data.data_show.train_locate_name)
+                        $('#updatetrain_date_go').val(data.data_show.train_date_go)
+                        $('#updatetrain_date_back').val(data.data_show.train_date_back)
+                        $('#updatetrain_title').val(data.data_show.train_title)
+                        $('#updatetrain_detail').val(data.data_show.train_detail)
+                        $('#updatetrain_assign_work').val(data.data_show.train_assign_work_name)
+                        $('#updatetrain_vehicle').val(data.data_show.train_vehicle)
+                        $('#updatetrain_head').val(data.data_show.train_head_name)
+                    },
+                });
+            });
+
+            $('#UpdateBtn').click(function() {
+                var train_id = $('#update_train_id').val();
+                var signature = $('#signature').val();  
+         
+                $.ajax({
+                    url: "{{ route('u.user_train_poupdate') }}",
                     type: "POST",
                     dataType: 'json',
                     data: {
-                        train_book_advert, train_book_no, train_date_go,
-                        train_date_back, train_title, train_detail,train_expenses,train_expenses_out,
-                        train_assign_work, train_vehicle,train_head,train_locate
+                        train_id ,signature
                     },
                     success: function(data) {
                         if (data.status == 200) {
                             Swal.fire({
-                                title: 'เพิ่มข้อมูลสำเร็จ',
-                                text: "You Insert data success",
+                                title: 'เห็นชอบเรียบร้อย',
+                                text: "You Agree success",
+                                icon: 'success',
+                                showCancelButton: false,
+                                confirmButtonColor: '#06D177',
+                                confirmButtonText: 'เรียบร้อย'
+                            }).then((result) => {
+                                if (result
+                                    .isConfirmed) {
+                                    console.log(
+                                        data);
+
+                                    window.location
+                                        .reload();
+                                }
+                            })
+                        } else {
+
+                        }
+
+                    },
+                });
+            });
+
+            $('#UpdateNoBtn').click(function() {
+                var train_id = $('#update_train_id').val();
+                var signature = $('#signature').val();  
+         
+                $.ajax({
+                    url: "{{ route('u.user_train_poupdate_no') }}",
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
+                        train_id ,signature
+                    },
+                    success: function(data) {
+                        if (data.status == 200) {
+                            Swal.fire({
+                                title: 'ไม่เห็นชอบเรียบร้อย',
+                                text: "You Dont' Agree success",
                                 icon: 'success',
                                 showCancelButton: false,
                                 confirmButtonColor: '#06D177',
