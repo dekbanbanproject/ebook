@@ -176,13 +176,13 @@ use App\Http\Controllers\StaticController;
                     <label for="" style="color: white;" class="me-3 Head1">สสอ.</label>
                 </a> --}}
                 @if ($checkpo != 0)
-                    <a href="{{url('user_train_po')}}" class="ladda-button btn-pill btn btn-primary d-shadow me-2">
+                    <a href="{{url('user_train_po')}}" class="ladda-button btn-pill btn btn-primary d-shadow me-2" target="_blank">
                         <span class="ladda-label"><i class="fa-solid fa-user-group text-white me-2"></i> PO </span>
                         <span class="ladda-spinner"></span> 
                     </a>
                 @endif
                 @if ($checksso != 0)
-                    <a href="{{ url('user_train_sso') }}" class="ladda-button btn-pill btn btn-danger d-shadow">
+                    <a href="{{ url('user_train_sso') }}" class="ladda-button btn-pill btn btn-danger d-shadow" target="_blank">
                         <i class="fa-solid fa-user-group me-2"></i>
                         SSO
                     </a>

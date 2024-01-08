@@ -21,6 +21,10 @@ use Illuminate\Support\Facades\File;
 use DataTables;
 use Illuminate\Support\Facades\Hash;
 use Auth;
+use PDF;
+use setasign\Fpdi\Fpdi;
+ 
+ 
 
 class TrainController extends Controller
 {
@@ -28,6 +32,7 @@ class TrainController extends Controller
     public function user_train(Request $request)
     {
         $storeid   = Auth::user()->store_id;
+        $iduser    = Auth::user()->id;
         $startdate = $request->startdate;
         $enddate   = $request->enddate;
         $date      = date('Y-m-d');
@@ -53,23 +58,23 @@ class TrainController extends Controller
             $data['train'] = DB::connection('mysql')->select(' 
                 SELECT t.train_id
                     ,t.train_book_advert,t.train_book_no,t.train_date,t.train_title,tl.train_location_name,t.train_detail,t.train_date_go,t.train_date_back
-                    ,t.train_vehicle,t.train_vehicle_pai,p.fname,p.lname
+                    ,t.train_vehicle,t.train_vehicle_pai,p.fname,p.lname,t.train_active
                     FROM train t
                     LEFT OUTER JOIN train_location tl ON tl.train_location_id = t.train_locate
                     LEFT OUTER JOIN users p ON p.id = t.train_assign_work 
                     WHERE t.train_date_go BETWEEN "'.$startdate.'" and "'.$enddate.'"
-                
+                    AND user_id = "'. $iduser.'"
             '); 
         } else {
             $data['train'] = DB::connection('mysql')->select(' 
                 SELECT t.train_id
                     ,t.train_book_advert,t.train_book_no,t.train_date,t.train_title,tl.train_location_name,t.train_detail,t.train_date_go,t.train_date_back
-                    ,t.train_vehicle,t.train_vehicle_pai,p.fname,p.lname
+                    ,t.train_vehicle,t.train_vehicle_pai,p.fname,p.lname,t.train_active
                     FROM train t
                     LEFT OUTER JOIN train_location tl ON tl.train_location_id = t.train_locate
                     LEFT OUTER JOIN users p ON p.id = t.train_assign_work 
                     WHERE t.train_date_go BETWEEN "'.$newDate.'" and "'.$date.'"
-                
+                    AND user_id = "'. $iduser.'"
             '); 
         }   
            
@@ -185,7 +190,13 @@ class TrainController extends Controller
         $data['train_location']     = Train_location::get(); 
 
         $dataedit = Train::where('train_id','=',$id)->first(); 
-        $signature = base64_encode(file_get_contents($dataedit->train_signature)); 
+        if ($dataedit->train_signature == '') {
+            $signature = ''; 
+        } else {
+            $signature = base64_encode(file_get_contents($dataedit->train_signature)); 
+        }
+        
+        
  
         return view('font_user.user_train_edit',$data,[
             'dataedits'   => $dataedit,
@@ -239,6 +250,227 @@ class TrainController extends Controller
                    
                          
     }
+
+    public function user_train_print(Request $request, $id)
+    { 
+        $dataedit = Train::leftjoin('users', 'users.id', '=', 'train.user_id')->leftjoin('users_prefix', 'users_prefix.prefix_id', '=', 'users.pname')
+            ->leftjoin('position', 'position.POSITION_ID', '=', 'users.position_id')
+            ->where('train_id', '=', $id)->first();
+  
+
+        define('FPDF_FONTPATH', 'font/');
+        require(base_path('public') . "/fpdf/WriteHTML.php");
+
+        $pdf = new Fpdi(); // Instantiation   start-up Fpdi
+
+        function dayThai($strDate)
+        {
+            $strDay = date("j", strtotime($strDate));
+            return $strDay;
+        }
+        function monthThai($strDate)
+        {
+            $strMonth = date("n", strtotime($strDate));
+            $strMonthCut = array("", "มกราคม", "กุมภาพันธ์ ", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม");
+            $strMonthThai = $strMonthCut[$strMonth];
+            return $strMonthThai;
+        }
+        function yearThai($strDate)
+        {
+            $strYear = date("Y", strtotime($strDate)) + 543;
+            return $strYear;
+        }
+        function time($strtime)
+        {
+            $H = substr($strtime, 0, 5);
+            return $H;
+        }
+
+        function DateThai($strDate)
+        {
+            if ($strDate == '' || $strDate == null || $strDate == '0000-00-00') {
+                $datethai = '';
+            } else {
+                $strYear = date("Y", strtotime($strDate)) + 543;
+                $strMonth = date("n", strtotime($strDate));
+                $strDay = date("j", strtotime($strDate));
+                $strMonthCut = array("", "ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค.");
+                $strMonthThai = $strMonthCut[$strMonth];
+                $datethai = $strDate ? ($strDay . ' ' . $strMonthThai . ' ' . $strYear) : '-';
+            }
+            return $datethai;
+        }
+
+        function DateThaifu($strDate)
+        {
+            if ($strDate == '' || $strDate == null || $strDate == '0000-00-00') {
+                $datethai = '';
+            } else {
+                $strYear = date("Y", strtotime($strDate)) + 543;
+                $strMonth = date("n", strtotime($strDate));
+                $strDay = date("j", strtotime($strDate));
+                $strMonthCut = array("", "มกราคม", "กุมภาพันธ์ ", "มีนาคม", "เมษายน", "พฤษภาคม", "มิถุนายน", "กรกฎาคม", "สิงหาคม", "กันยายน", "ตุลาคม", "พฤศจิกายน", "ธันวาคม");
+                $strMonthThai = $strMonthCut[$strMonth];
+                $datethai = $strDate ? ($strDay . ' ' . $strMonthThai . ' ' . $strYear) : '-';
+            }
+            return $datethai;
+        }
+
+        $date = date_create($dataedit->created_at);
+        $datnow =  date_format($date, "Y-m-j");
+         
+        $pdf->SetLeftMargin(22);
+        $pdf->SetRightMargin(5);
+       
+        $pdf->AddFont('THSarabunNew', '', 'THSarabunNew.php');
+        $pdf->AddFont('THSarabunNew Bold', '', 'THSarabunNew Bold.php');
+        $pdf->SetFont('THSarabunNew Bold', '', 19);
+        // $pdf->AddPage("L", ['100', '100']);
+        $pdf->AddPage("P");
+        $pdf->Image('assets/images/crut.png', 22, 15, 16, 16);
+
+        $pdf->Cell(135);
+        $pdf->SetFont('THSarabunNew', '', 14);
+        $no = $pdf->Text(160,14,iconv( 'UTF-8','TIS-620','สำนักงานสาธารณสุขอำเภอสตึก' )); 
+        $pdf->Text(160,19,iconv( 'UTF-8','TIS-620','เลขที่รับ' ));
+        $pdf->Text(160,25,iconv( 'UTF-8','TIS-620','วันที่ ......../.................../.............' ));
+        $pdf->Text(160,30,iconv( 'UTF-8','TIS-620','เวลา ..........................................' ));
+        $pdf->Cell(50,22,$no, 1,0, 'C' );
+        // $pdf->Image($sig, 8,241, 50, 17,"png");
+        // $pdf->Text(13,260,iconv( 'UTF-8','TIS-620', $rong)); 
+        // $pdf->Text(19,265,iconv( 'UTF-8','TIS-620','หัวหน้าบริหาร '  ));
+        // $pdf->SetTextColor(0, 0, 0);// Set the color of new text 
+
+
+        $pdf->SetFont('THSarabunNew Bold', '', 27);
+        $pdf->Text(80, 25, iconv('UTF-8', 'TIS-620', 'บันทึกข้อความ'));
+        $pdf->SetFont('THSarabunNew', '', 17);
+        // $pdf->Text(75, 33, iconv('UTF-8', 'TIS-620', 'โรงพยาบาล ' . $org->orginfo_name));
+        $pdf->SetFont('THSarabunNew Bold', '', 17);
+        $pdf->Text(25, 41, iconv('UTF-8', 'TIS-620', 'ส่วนราชการ '));
+        $pdf->SetFont('THSarabunNew', '', 17);
+        $pdf->Text(50, 41, iconv('UTF-8', 'TIS-620', 'โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านสนามชัย อำเภอสตึก จังหวัดบุรีรัมย์ '));
+        $pdf->SetFont('THSarabunNew Bold', '', 17);
+        $pdf->Text(25, 49, iconv('UTF-8', 'TIS-620', 'ที่ '));   
+        $pdf->SetFont('THSarabunNew', '', 15);
+        $pdf->Text(97, 49, iconv('UTF-8', 'TIS-620', 'วันที่ '. DateThaifu($datnow)));  
+
+        $pdf->SetFont('THSarabunNew', '', 15);
+        $pdf->Text(35, 49, iconv('UTF-8', 'TIS-620', ''. $dataedit->train_book_no));
+        $pdf->SetFont('THSarabunNew Bold', '', 17);
+        $pdf->Text(25, 57, iconv('UTF-8', 'TIS-620', 'เรื่อง '));
+        $pdf->SetFont('THSarabunNew', '', 15);
+        $pdf->Text(35, 57, iconv('UTF-8', 'TIS-620', 'ขออนุมัติเดินทางไปราชการนอกสำนักงาน'));
+        // x1,y1,x2,y2
+        $pdf->Line(25, 60, 180, 60);   // 25 คือ ย่อหน้า  // 45 คือ margintop   // 180 คือความยาวเส้น 
+        $pdf->SetFont('THSarabunNew Bold', '', 15);
+        $pdf->Text(25, 65, iconv('UTF-8', 'TIS-620', 'เรียน สาธารณสุขอำเภอสตึก  '));
+        $pdf->SetFont('THSarabunNew', '', 15); 
+        $pdf->Text(35, 73, iconv('UTF-8', 'TIS-620', 'ข้าพเจ้า  '. $dataedit->prefix_name . '' . $dataedit->fname . '  ' . $dataedit->lname));
+        $pdf->Text(95, 73, iconv('UTF-8', 'TIS-620', 'ตำแหน่ง  '. $dataedit->POSITION_NAME ));
+        $pdf->Text(25, 80, iconv('UTF-8', 'TIS-620', 'ปฎิบัติงานประจำอยู่ที่ โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านสนามชัย มึความประสงค์ขออนุมัติเดินทางไปเข้าร่วม'));
+        $pdf->Text(25, 87, iconv('UTF-8', 'TIS-620', 'เป็นวิทยากรประชุมเชิงปฎิบัติการเรียกเก็บค่าบริการผู้ป่วยสิทธิประกันสังคมและสิทธิ์อื่นๆ ของกลุ่มโรงพยาบาลส่งเสริม'));
+        $pdf->Text(25, 94, iconv('UTF-8', 'TIS-620', 'สุขภาพตำบล ในจังหวัดบุรีรัมย์ ปีงบประมาณ 2567 ดังโปรแกรมดังต่อไปนี้'));
+ 
+        // $pdf->Text(130, 35, iconv('UTF-8', 'TIS-620', 'วันที่  ' . dayThai($datnow) . '  ' . monthThai($datnow) . '  พ.ศ. ' . yearThai($datnow)));
+        $pdf->Image($dataedit->train_signature, 82, 175, 50, 17, "png");
+        $pdf->Text(35, 177, iconv('UTF-8', 'TIS-620', 'จึงเรียนมาเพื่อโปรดพิจารณา'));
+        $pdf->Text(80, 190, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้ขออนุญาต'));
+        $pdf->SetFont('THSarabunNew', '', 15);
+        $pdf->Text(88, 198, iconv('UTF-8', 'TIS-620', '( ..................................................... )'));
+        $pdf->Text(80, 206, iconv('UTF-8', 'TIS-620', 'ตำแหน่ง'));
+        $pdf->Text(97, 206, iconv('UTF-8', 'TIS-620', ''. $dataedit->POSITION_NAME));
+
+        $pdf->Image($dataedit->train_signature, 40, 200, 50, 17, "png");
+        $pdf->Text(35, 215, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้มอบ'));
+        $pdf->Text(40, 222, iconv('UTF-8', 'TIS-620', '( .......................................................... )')); 
+
+        $pdf->Text(110, 215, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้รับมอบ'));
+        $pdf->Text(115, 222, iconv('UTF-8', 'TIS-620', '( .......................................................... )'));
+        //ผู้ขออนุญาต
+        // if ($siguser != null) {  
+        //     //ตรงกลาง
+        //     $pdf->Image($siguser, 80, 85, 50, 17, "png");
+        //     $pdf->SetFont('THSarabunNew', '', 15);
+        //     $pdf->Text(71, 95, iconv('UTF-8', 'TIS-620', '(ลงชื่อ)                                        ผู้แจ้งซ่อม'));
+        //     $pdf->SetFont('THSarabunNew', '', 15);
+        //     // $pdf->Text(85, 105, iconv('UTF-8', 'TIS-620', '(   ' . $dataedit->com_repaire_user_name . '   )'));
+        // } else {
+            
+        // }
+
+        // $pdf->Line(25, 110, 180, 110);   // 25 คือ ย่อหน้า  // 45 คือ margintop   // 180 คือความยาวเส้น 
+        
+        // if ($dataedit->com_repaire_speed == "1") { 
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 78, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 103, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 128, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 157, 123, 4, 4);
+        // }else if ($dataedit->com_repaire_speed == "2") { 
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 103, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 78, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 128, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 157, 123, 4, 4);
+        // }else if ($dataedit->com_repaire_speed == "3") { 
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 128, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 103, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 78, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 157, 123, 4, 4);
+        // } else {
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 157, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 103, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 128, 123, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 78, 123, 4, 4);
+        //  }
+        //  $pdf->SetFont('THSarabunNew', '', 14);
+        //  $pdf->Text(25, 136, iconv('UTF-8', 'TIS-620', 'รายละเอียดการตรวจซ่อมที่พบ/ความเห็นของช่าง  ')); 
+        //  $pdf->SetFont('THSarabunNew', '', 14);
+        //  $pdf->Text(90, 136, iconv('UTF-8', 'TIS-620',' :  ' .$dataedit->com_repaire_detail_tech));   
+        //ผู้ดูแลอนุญาต
+        // if ($sigstaff != null) {
+        //     $pdf->Image($sigstaff, 109, 173, 50, 17, "png");
+        //     $pdf->SetFont('THSarabunNew', '', 15);
+        //     $pdf->Text(100, 188, iconv('UTF-8', 'TIS-620', '(ลงชื่อ)                                            ผู้อนุญาต'));
+        //     // $pdf->Text(112, 198, iconv('UTF-8', 'TIS-620', '(   ' . $dataedit->car_service_staff_name . '   )'));
+        // } else {
+        //     // $pdf->Image($siguser, 105,173, 50, 17,"png"); 
+        //     $pdf->SetFont('THSarabunNew', '', 15);
+        //     $pdf->Text(100, 180, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) ......................................................... ผู้อนุญาต'));
+        //     $pdf->SetFont('THSarabunNew', '', 15);
+        //     $pdf->Text(108, 189, iconv('UTF-8', 'TIS-620', '( .......................................................... )'));
+        // }
+
+    
+        // if ($sigpo != null) { 
+        //     if ($dataedit->car_service_status == "noallow") {
+        //         $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 105, 217, 4, 4);
+        //         $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 140, 217, 4, 4);
+        //     } else {
+        //         $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 140, 217, 4.5, 4.5);
+        //         $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 105, 217, 4.5, 4.5); 
+        //     } 
+        //     $pdf->Image($sigpo, 109, 225, 50, 17, "png");
+        //     $pdf->Text(108, 249, iconv('UTF-8', 'TIS-620', $po)); 
+        //     $pdf->SetFont('THSarabunNew', '', 15);
+        //     $pdf->Text(100, 240, iconv('UTF-8', 'TIS-620', '(ลงชื่อ)                                              ผู้อนุญาต')); 
+        //     $pdf->Text(108, 258, iconv('UTF-8', 'TIS-620', 'ผู้อำนวยการ' . $orgpo->orginfo_name));
+        // } else { 
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 105, 217, 4, 4);
+        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 140, 217, 4, 4);
+        //     $pdf->SetFont('THSarabunNew', '', 15);
+        //     $pdf->Text(100, 240, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) ......................................................... ผู้อนุญาต'));
+        //     $pdf->SetFont('THSarabunNew', '', 15);
+        //     $pdf->Text(108, 249, iconv('UTF-8', 'TIS-620', '( .......................................................... )'));
+        //     $pdf->SetFont('THSarabunNew', '', 15);
+        //     $pdf->Text(108, 258, iconv('UTF-8', 'TIS-620', 'ผู้อำนวยการ' . $orgpo->orginfo_name));
+        // }
+
+
+        $pdf->Output();
+
+        exit;
+    }
+
 
  
 }

@@ -202,7 +202,8 @@ $yb = date('Y') + 542;
                             style=" border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr> 
-                                        <th width="5%" class="text-center">ลำดับ</th>  
+                                        <th width="5%" class="text-center">ลำดับ</th> 
+                                        <th class="text-center">สถานะ</th> 
                                         <th class="text-center">หนังสืออ้างอิง</th>
                                         <th class="text-center" >เลขที่หนังสือ</th>
                                         <th class="text-center" >เรื่อง</th>
@@ -212,6 +213,7 @@ $yb = date('Y') + 542;
                                         {{-- <th class="text-center">พาหนะ</th> --}}
                                         {{-- <th class="text-center">หัวหน้า</th>   --}}
                                         <th class="text-center">มอบหมายงายนให้</th> 
+                                        <th class="text-center">print</th> 
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -219,7 +221,19 @@ $yb = date('Y') + 542;
                                     @foreach ($train as $item) 
                                     
                                         <tr id="tr_{{$item->train_id}}" >                                                  
-                                            <td class="text-center" width="5%">{{ $i++ }}</td>    
+                                            <td class="text-center" width="5%">{{ $i++ }}</td>   
+                                            <td class="text-center" width="5%">
+                                                @if ($item->train_active == 'REQ')
+                                                    <span class="badge rounded-pill badge-soft-warning" style="font-size:15px">ร้องขอ</span> 
+                                                @elseif ($item->train_active == 'AGREE')
+                                                    <span class="badge rounded-pill badge-soft-primary" style="font-size:15px">เห็นชอบ</span> 
+                                                @elseif ($item->train_active == 'APPROVE')
+                                                    <span class="badge rounded-pill badge-soft-success" style="font-size:15px">อนุมัติ</span> 
+                                                @else
+                                                    <span class="badge rounded-pill badge-soft-danger" style="font-size:15px">ยกเลิก</span> 
+                                                @endif
+                                                
+                                            </td> 
                                             <td class="text-center" width="5%">{{ $item->train_book_advert }}</td> 
                                             <td class="text-center" width="5%"><a href="{{url('user_train_edit/'.$item->train_id)}}">{{ $item->train_book_no }} </a></td>  
                                             <td class="p-2">{{ $item->train_title }}</td>  
@@ -227,6 +241,11 @@ $yb = date('Y') + 542;
                                             <td class="text-center" width="8%">{{ $item->train_date_back }}</td> 
                                             {{-- <td class="text-center" width="10%">{{ $item->train_vehicle }}</td>  --}}
                                             <td class="text-center" width="10%">{{ $item->fname }} {{ $item->lname }}</td>   
+                                            <td class="text-center" width="5%">
+                                                <a href="{{url('user_train_print/'.$item->train_id)}}">
+                                                    <i class="fas fa-2x fa-print text-danger"></i>
+                                                </a>
+                                            </td> 
                                         </tr>
                                  
                                     @endforeach

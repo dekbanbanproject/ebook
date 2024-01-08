@@ -41,6 +41,7 @@ Route::match(['get','post'],'user_train_add',[App\Http\Controllers\TrainControll
 Route::match(['get','post'],'user_train_save',[App\Http\Controllers\TrainController::class, 'user_train_save'])->name('u.user_train_save');//
 Route::match(['get','post'],'user_train_edit/{id}',[App\Http\Controllers\TrainController::class, 'user_train_edit'])->name('u.user_train_edit');//
 Route::match(['get','post'],'user_train_update',[App\Http\Controllers\TrainController::class, 'user_train_update'])->name('u.user_train_update');//
+Route::match(['get','post'],'user_train_print/{id}',[App\Http\Controllers\TrainController::class, 'user_train_print'])->name('u.user_train_print');//
 
 Route::match(['get','post'],'addlocation',[App\Http\Controllers\TrainController::class, 'addlocation'])->name('u.addlocation');//
 
@@ -57,6 +58,13 @@ Route::match(['get','post'],'user_train_poupdate_no',[App\Http\Controllers\PoCon
 Route::match(['get','post'],'user_train_sso',[App\Http\Controllers\SSOController::class, 'user_train_sso'])->name('u.user_train_sso');//
 Route::match(['get','post'],'user_train_sso_approve',[App\Http\Controllers\SSOController::class, 'user_train_sso_approve'])->name('u.user_train_sso_approve');//
 Route::match(['get','post'],'user_train_sso_noapprove',[App\Http\Controllers\SSOController::class, 'user_train_sso_noapprove'])->name('u.user_train_sso_noapprove');//
+
+//ผู้ดูแลระบบ
+Route::match(['get','post'],'main_staff',[App\Http\Controllers\AdminController::class, 'main_staff'])->name('a.main_staff');//
+Route::match(['get','post'],'main_staff_add',[App\Http\Controllers\AdminController::class, 'main_staff_add'])->name('a.main_staff_add');//
+Route::match(['get','post'],'main_staff_save',[App\Http\Controllers\AdminController::class, 'main_staff_save'])->name('a.main_staff_save');//
+Route::match(['get','post'],'main_staff_edit/{id}',[App\Http\Controllers\AdminController::class, 'main_staff_edit'])->name('a.main_staff_edit');//
+Route::match(['get','post'],'main_staff_update',[App\Http\Controllers\AdminController::class, 'main_staff_update'])->name('a.main_staff_update');//
 
 });
 

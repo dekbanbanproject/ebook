@@ -51,6 +51,16 @@ class HomeController extends Controller
             'enddate'       =>     $enddate,
         ]);
     }
+    public function main_admin(Request $request)
+    {
+        $startdate = $request->startdate;
+        $enddate = $request->enddate;
+
+        return view('admin.main_admin',[
+            'startdate'     =>     $startdate,
+            'enddate'       =>     $enddate,
+        ]);
+    }
     public function user_editprofile(Request $request,$id)
     { 
         $storeid = Auth::user()->store_id;
