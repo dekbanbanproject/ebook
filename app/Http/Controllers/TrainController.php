@@ -256,7 +256,12 @@ class TrainController extends Controller
         $dataedit = Train::leftjoin('users', 'users.id', '=', 'train.user_id')->leftjoin('users_prefix', 'users_prefix.prefix_id', '=', 'users.pname')
             ->leftjoin('position', 'position.POSITION_ID', '=', 'users.position_id')
             ->where('train_id', '=', $id)->first();
-  
+        
+        $org = DB::table('orginfo')->where('orginfo_id','=',1)
+            ->leftjoin('users','users.id','=','orginfo.orginfo_po_id')
+            ->leftjoin('users_prefix','users_prefix.prefix_code','=','users.pname')
+            ->first();
+        $po = $org->prefix_name.' '.$org->fname.'  '.$org->lname;
 
         define('FPDF_FONTPATH', 'font/');
         require(base_path('public') . "/fpdf/WriteHTML.php");
@@ -318,7 +323,14 @@ class TrainController extends Controller
 
         $date = date_create($dataedit->created_at);
         $datnow =  date_format($date, "Y-m-j");
-         
+
+        // ข้าพเจ้ามอบหมายงานให้
+        $assignwork = Train::leftjoin('users', 'users.id', '=', 'train.train_assign_work')->leftjoin('users_prefix', 'users_prefix.prefix_id', '=', 'users.pname')
+        ->leftjoin('position', 'position.POSITION_ID', '=', 'users.position_id')
+        ->where('train_id', '=', $id)->first();
+        $assign = $assignwork->prefix_name.' '.$assignwork->fname.'  '.$assignwork->lname;
+        $assign_posi = $assignwork->POSITION_NAME;
+
         $pdf->SetLeftMargin(22);
         $pdf->SetRightMargin(5);
        
@@ -336,12 +348,7 @@ class TrainController extends Controller
         $pdf->Text(160,25,iconv( 'UTF-8','TIS-620','วันที่ ......../.................../.............' ));
         $pdf->Text(160,30,iconv( 'UTF-8','TIS-620','เวลา ..........................................' ));
         $pdf->Cell(50,22,$no, 1,0, 'C' );
-        // $pdf->Image($sig, 8,241, 50, 17,"png");
-        // $pdf->Text(13,260,iconv( 'UTF-8','TIS-620', $rong)); 
-        // $pdf->Text(19,265,iconv( 'UTF-8','TIS-620','หัวหน้าบริหาร '  ));
-        // $pdf->SetTextColor(0, 0, 0);// Set the color of new text 
-
-
+   
         $pdf->SetFont('THSarabunNew Bold', '', 27);
         $pdf->Text(80, 25, iconv('UTF-8', 'TIS-620', 'บันทึกข้อความ'));
         $pdf->SetFont('THSarabunNew', '', 17);
@@ -349,7 +356,7 @@ class TrainController extends Controller
         $pdf->SetFont('THSarabunNew Bold', '', 17);
         $pdf->Text(25, 41, iconv('UTF-8', 'TIS-620', 'ส่วนราชการ '));
         $pdf->SetFont('THSarabunNew', '', 17);
-        $pdf->Text(50, 41, iconv('UTF-8', 'TIS-620', 'โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านสนามชัย อำเภอสตึก จังหวัดบุรีรัมย์ '));
+        $pdf->Text(50, 41, iconv('UTF-8', 'TIS-620', ''.$org->orginfo_name.' อำเภอสตึก จังหวัดบุรีรัมย์ '));
         $pdf->SetFont('THSarabunNew Bold', '', 17);
         $pdf->Text(25, 49, iconv('UTF-8', 'TIS-620', 'ที่ '));   
         $pdf->SetFont('THSarabunNew', '', 15);
@@ -368,11 +375,16 @@ class TrainController extends Controller
         $pdf->SetFont('THSarabunNew', '', 15); 
         $pdf->Text(35, 73, iconv('UTF-8', 'TIS-620', 'ข้าพเจ้า  '. $dataedit->prefix_name . '' . $dataedit->fname . '  ' . $dataedit->lname));
         $pdf->Text(95, 73, iconv('UTF-8', 'TIS-620', 'ตำแหน่ง  '. $dataedit->POSITION_NAME ));
-        $pdf->Text(25, 80, iconv('UTF-8', 'TIS-620', 'ปฎิบัติงานประจำอยู่ที่ โรงพยาบาลส่งเสริมสุขภาพตำบลบ้านสนามชัย มึความประสงค์ขออนุมัติเดินทางไปเข้าร่วม'));
-        $pdf->Text(25, 87, iconv('UTF-8', 'TIS-620', 'เป็นวิทยากรประชุมเชิงปฎิบัติการเรียกเก็บค่าบริการผู้ป่วยสิทธิประกันสังคมและสิทธิ์อื่นๆ ของกลุ่มโรงพยาบาลส่งเสริม'));
-        $pdf->Text(25, 94, iconv('UTF-8', 'TIS-620', 'สุขภาพตำบล ในจังหวัดบุรีรัมย์ ปีงบประมาณ 2567 ดังโปรแกรมดังต่อไปนี้'));
- 
-        // $pdf->Text(130, 35, iconv('UTF-8', 'TIS-620', 'วันที่  ' . dayThai($datnow) . '  ' . monthThai($datnow) . '  พ.ศ. ' . yearThai($datnow)));
+        $pdf->Text(25, 80, iconv('UTF-8', 'TIS-620', 'ปฎิบัติงานประจำอยู่ที่ '.$org->orginfo_name.' มึความประสงค์ขออนุมัติเดินทางไปเข้าร่วม'));
+        $pdf->Text(25, 88, iconv('UTF-8', 'TIS-620', 'เป็นวิทยากรประชุมเชิงปฎิบัติการเรียกเก็บค่าบริการผู้ป่วยสิทธิประกันสังคมและสิทธิ์อื่นๆ ของกลุ่มโรงพยาบาลส่งเสริม'));
+        $pdf->Text(25, 96, iconv('UTF-8', 'TIS-620', 'สุขภาพตำบล ในจังหวัดบุรีรัมย์ ปีงบประมาณ 2567 ดังโปรแกรมดังต่อไปนี้'));
+        $pdf->Text(25, 104, iconv('UTF-8', 'TIS-620', 'สถานที่ปฎิบัติราชการ '. $dataedit->train_locate_name));
+        $pdf->Text(25, 112, iconv('UTF-8', 'TIS-620', 'งานที่ปฎิบัติ '. $dataedit->train_detail));
+        $pdf->Text(25, 120, iconv('UTF-8', 'TIS-620', 'วันที่ไป '. DateThaifu($dataedit->train_date_go)));
+        $pdf->Text(70, 120, iconv('UTF-8', 'TIS-620', 'วันที่กลับ '. DateThaifu($dataedit->train_date_back)));
+        $pdf->Text(35, 128, iconv('UTF-8', 'TIS-620', 'โดยรถยนต์ '. $dataedit->train_vehicle .'  ทะเบียน '. $dataedit->train_vehicle_pai.'      ในระหว่างที่ข้าพเจ้าไปราชการครั้งนี้'));
+        $pdf->Text(25, 136, iconv('UTF-8', 'TIS-620', 'ข้าพเจ้ามอบหมายงานให้ '. $assign.'   ตำแหน่ง  '. $assign_posi ));
+
         $pdf->Image($dataedit->train_signature, 82, 175, 50, 17, "png");
         $pdf->Text(35, 177, iconv('UTF-8', 'TIS-620', 'จึงเรียนมาเพื่อโปรดพิจารณา'));
         $pdf->Text(80, 190, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้ขออนุญาต'));
@@ -381,12 +393,14 @@ class TrainController extends Controller
         $pdf->Text(80, 206, iconv('UTF-8', 'TIS-620', 'ตำแหน่ง'));
         $pdf->Text(97, 206, iconv('UTF-8', 'TIS-620', ''. $dataedit->POSITION_NAME));
 
-        $pdf->Image($dataedit->train_signature, 40, 200, 50, 17, "png");
-        $pdf->Text(35, 215, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้มอบ'));
-        $pdf->Text(40, 222, iconv('UTF-8', 'TIS-620', '( .......................................................... )')); 
+        $pdf->Image($dataedit->train_signature, 40, 205, 50, 17, "png");
+        $pdf->Text(35, 220, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้มอบ'));
+        $pdf->Text(40, 227, iconv('UTF-8', 'TIS-620', '( .......................................................... )')); 
 
-        $pdf->Text(110, 215, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้รับมอบ'));
-        $pdf->Text(115, 222, iconv('UTF-8', 'TIS-620', '( .......................................................... )'));
+        $pdf->Text(110, 220, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้รับมอบ'));
+        $pdf->Text(115, 227, iconv('UTF-8', 'TIS-620', '( .......................................................... )'));
+
+        $pdf->Text(35, 242, iconv('UTF-8', 'TIS-620', 'ความเห็นของผู้บังคับบัญชา'));
         //ผู้ขออนุญาต
         // if ($siguser != null) {  
         //     //ตรงกลาง
@@ -401,31 +415,24 @@ class TrainController extends Controller
 
         // $pdf->Line(25, 110, 180, 110);   // 25 คือ ย่อหน้า  // 45 คือ margintop   // 180 คือความยาวเส้น 
         
-        // if ($dataedit->com_repaire_speed == "1") { 
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 78, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 103, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 128, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 157, 123, 4, 4);
-        // }else if ($dataedit->com_repaire_speed == "2") { 
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 103, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 78, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 128, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 157, 123, 4, 4);
-        // }else if ($dataedit->com_repaire_speed == "3") { 
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 128, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 103, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 78, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 157, 123, 4, 4);
-        // } else {
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 157, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 103, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 128, 123, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 78, 123, 4, 4);
-        //  }
-        //  $pdf->SetFont('THSarabunNew', '', 14);
-        //  $pdf->Text(25, 136, iconv('UTF-8', 'TIS-620', 'รายละเอียดการตรวจซ่อมที่พบ/ความเห็นของช่าง  ')); 
-        //  $pdf->SetFont('THSarabunNew', '', 14);
-        //  $pdf->Text(90, 136, iconv('UTF-8', 'TIS-620',' :  ' .$dataedit->com_repaire_detail_tech));   
+        if ($dataedit->train_active == "APPROVE") { 
+            $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 47, 247, 4, 4);  
+            $pdf->Text(53, 250, iconv('UTF-8', 'TIS-620', 'เห็นควรอนุมัติ')); 
+
+            $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 140, 247, 4, 4);  
+            $pdf->Text(147, 250, iconv('UTF-8', 'TIS-620', 'อนุมัติ')); 
+
+        } else {
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 35, 250, 4, 4);
+         }
+       
+         $pdf->Image($dataedit->train_signature_po, 35, 257, 50, 17, "png");
+         $pdf->Text(43, 274, iconv('UTF-8', 'TIS-620', '('.$po.' )'));
+         $pdf->Text(25, 282, iconv('UTF-8', 'TIS-620', 'ผู้อำนวยการ'.$org->orginfo_name));
+
+         $pdf->Image($dataedit->train_signature_sso, 124, 257, 50, 17, "png");
+         $pdf->Text(135, 274, iconv('UTF-8', 'TIS-620', '( '.$org->head_sso_name.' )'));
+         $pdf->Text(137, 282, iconv('UTF-8', 'TIS-620', ''.$org->sso_name));
         //ผู้ดูแลอนุญาต
         // if ($sigstaff != null) {
         //     $pdf->Image($sigstaff, 109, 173, 50, 17, "png");
