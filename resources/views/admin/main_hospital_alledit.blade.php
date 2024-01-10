@@ -216,7 +216,7 @@ use App\Http\Controllers\StaticController;
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group"> 
-                                        <input id="orginfo_name" type="text" class="form-control" name="orginfo_name" value="{{$orginfo->orginfo_name}}">
+                                        <input id="orginfo_name" type="text" class="form-control form-control-sm" name="orginfo_name" value="{{$orginfo->orginfo_name}}">
                                     </div>
                                 </div> 
                                 
@@ -226,7 +226,7 @@ use App\Http\Controllers\StaticController;
                                 <div class="col-md-2">
                                     <div class="form-group">
                                         <input id="orginfo_code" type="text"
-                                            class="form-control" name="orginfo_code" value="{{$orginfo->orginfo_code}}">
+                                            class="form-control form-control-sm" name="orginfo_code" value="{{$orginfo->orginfo_code}}">
                                     </div>
                                 </div> 
                             </div>
@@ -235,8 +235,8 @@ use App\Http\Controllers\StaticController;
                                     <label for="orginfo_address">ที่อยู่ :</label>
                                 </div>
                                 <div class="col-md-10"> 
-                                    <div class="form-floating">
-                                        <textarea class="form-control" id="orginfo_address" name="orginfo_address">{{$orginfo->orginfo_address}}</textarea>
+                                    <div class="form-group">
+                                        <textarea class="form-control" id="orginfo_address" name="orginfo_address" cols="3">{{$orginfo->orginfo_address}}</textarea>
                                
                                       </div>
                                 </div>                                
@@ -248,7 +248,7 @@ use App\Http\Controllers\StaticController;
                                 <div class="col-md-4"> 
                                     <div class="form-group">
                                         <input id="orginfo_email" type="text"
-                                        class="form-control" name="orginfo_email" value="{{$orginfo->orginfo_email}}">
+                                        class="form-control form-control-sm" name="orginfo_email" value="{{$orginfo->orginfo_email}}">
                                       </div>
                                 </div>        
                                 <div class="col-md-2 text-end">
@@ -257,7 +257,7 @@ use App\Http\Controllers\StaticController;
                                 <div class="col-md-4"> 
                                     <div class="form-group">
                                         <input id="orginfo_tel" type="text"
-                                        class="form-control" name="orginfo_tel" value="{{$orginfo->orginfo_tel}}">
+                                        class="form-control form-control-sm" name="orginfo_tel" value="{{$orginfo->orginfo_tel}}">
                                       </div>
                                 </div>                        
                             </div>
@@ -268,7 +268,7 @@ use App\Http\Controllers\StaticController;
                                 <div class="col-md-4"> 
                                     <div class="form-group">
                                         <input id="orginfo_link" type="text"
-                                        class="form-control" name="orginfo_link" value="{{$orginfo->orginfo_link}}">
+                                        class="form-control form-control-sm" name="orginfo_link" value="{{$orginfo->orginfo_link}}">
                                       </div>
                                 </div>   
                                 <div class="col-md-2 text-end">
@@ -277,7 +277,7 @@ use App\Http\Controllers\StaticController;
                                 <div class="col-md-4"> 
                                     <div class="form-group">
                                         <input id="sso_name" type="text"
-                                        class="form-control" name="sso_name" value="{{$orginfo->sso_name}}" >
+                                        class="form-control form-control-sm" name="sso_name" value="{{$orginfo->sso_name}}" >
                                       </div>
                                 </div>                                
                             </div>
@@ -287,7 +287,7 @@ use App\Http\Controllers\StaticController;
                                 </div>
                                 <div class="col-md-4"> 
                                     <div class="form-group">                                        
-                                        <select id="orginfo_po_id" name="orginfo_po_id" class="form-control form-control-lg" style="width: 100%">
+                                        <select id="orginfo_po_id" name="orginfo_po_id" class="form-control form-control-sm" style="width: 100%">
                                             <option value=""></option>
                                                 @foreach ($users as $item2 )  
                                                 @if ($orginfo->orginfo_po_id == $item2->id)
@@ -305,7 +305,7 @@ use App\Http\Controllers\StaticController;
                                 </div>
                                 <div class="col-md-4"> 
                                     <div class="form-group">                                        
-                                        <select id="head_sso_id" name="head_sso_id" class="form-control form-control-lg" style="width: 100%">
+                                        <select id="head_sso_id" name="head_sso_id" class="form-control form-control-sm" style="width: 100%">
                                             <option value=""></option>
                                                 @foreach ($users as $item1 )  
                                                 @if ($orginfo->orginfo_po_id == $item1->id)
