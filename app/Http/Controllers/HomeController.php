@@ -200,33 +200,34 @@ class HomeController extends Controller
         $id = $request->input('orginfo_id');
 
         $update = Orginfo::find($id); 
-        $update->orginfo_name = $request->input('orginfo_name');
-        $update->orginfo_code = $request->input('orginfo_code');
-        $update->orginfo_link = $request->input('orginfo_link');
-        $update->orginfo_email = $request->input('orginfo_email');
-        $update->orginfo_address = $request->input('orginfo_address');
-        $update->orginfo_tel = $request->input('orginfo_tel');
-
-        $iduser = $request->input('orginfo_manage_id'); 
-        if ($iduser != '') {
-            $usersave = DB::table('users')->where('id','=',$iduser)->first();
-            $update->orginfo_manage_id = $usersave->id; 
-            $update->orginfo_manage_name = $usersave->fname. '  ' .$usersave->lname ; 
-        } else {
-            $update->orginfo_manage_id = ''; 
-            $update->orginfo_manage_name =''; 
-        }
-
-        
-        $iduserpo = $request->input('orginfo_po_id'); 
-        if ($iduserpo != '') {
-            $userposave = DB::table('users')->where('id','=',$iduserpo)->first();
-            $update->orginfo_po_id = $userposave->id; 
-            $update->orginfo_po_name = $userposave->fname. '  ' .$userposave->lname ; 
-        } else {
-            $update->orginfo_po_id = ''; 
-            $update->orginfo_po_name =''; 
-        }
+        $update->orginfo_name      = $request->input('orginfo_name');
+        $update->orginfo_code      = $request->input('orginfo_code');
+        $update->orginfo_link      = $request->input('orginfo_link');
+        $update->orginfo_email     = $request->input('orginfo_email');
+        $update->orginfo_address   = $request->input('orginfo_address');
+        $update->orginfo_tel       = $request->input('orginfo_tel');
+        $update->sso_name          = $request->input('sso_name');
+         // สาธารณสุขอำเภอ
+         $iduser = $request->input('head_sso_id'); 
+         if ($iduser != '') {
+             $usersave = DB::table('users')->where('id','=',$iduser)->first();
+             $update->head_sso_id = $usersave->id; 
+             $update->head_sso_name = $usersave->fname. '  ' .$usersave->lname ; 
+         } else {
+             $update->head_sso_id = ''; 
+             $update->head_sso_name =''; 
+         }
+ 
+         // ผู้อำนวยการ
+         $iduserpo = $request->input('orginfo_po_id'); 
+         if ($iduserpo != '') {
+             $userposave = DB::table('users')->where('id','=',$iduserpo)->first();
+             $update->orginfo_po_id = $userposave->id; 
+             $update->orginfo_po_name = $userposave->fname. '  ' .$userposave->lname ; 
+         } else {
+             $update->orginfo_po_id = ''; 
+             $update->orginfo_po_name =''; 
+         }
 
         if ($request->hasfile('orginfo_img')) {
             $description = 'storage/org/'.$update->orginfo_img;

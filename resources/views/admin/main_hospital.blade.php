@@ -266,32 +266,23 @@ use App\Http\Controllers\StaticController;
                                 <div class="col-md-2 text-end">
                                     <label for="orginfo_link">Link :</label>
                                 </div>
-                                <div class="col-md-10"> 
+                                <div class="col-md-4"> 
                                     <div class="form-group">
                                         <input id="orginfo_link" type="text"
-                                        class="form-control" name="orginfo_link"  value="{{ $orginfo->orginfo_link}}">
+                                        class="form-control" name="orginfo_link" value="{{$orginfo->orginfo_link}}">
+                                      </div>
+                                </div>   
+                                <div class="col-md-2 text-end">
+                                    <label for="sso_name">ชื่อสาธารณสุขอำเภอ :</label>
+                                </div>
+                                <div class="col-md-4"> 
+                                    <div class="form-group">
+                                        <input id="sso_name" type="text"
+                                        class="form-control" name="sso_name" value="{{$orginfo->sso_name}}" >
                                       </div>
                                 </div>                                
                             </div>
-                            <div class="row mt-3">                                
-                                <div class="col-md-2 text-end">
-                                    <label for="orginfo_manage_id">หัวหน้าบริหาร :</label>
-                                </div>
-                                <div class="col-md-4"> 
-                                    <div class="form-group">                                        
-                                        <select id="orginfo_manage_id" name="orginfo_manage_id" class="form-control form-control-lg" style="width: 100%">
-                                            <option value=""></option>
-                                                @foreach ($users as $item1 )  
-                                                @if ($orginfo->orginfo_manage_id == $item1->id)
-                                                <option value="{{ $item1->id}}" selected>{{ $item1->fname}}  {{ $item1->lname}}</option> 
-                                                @else
-                                                <option value="{{ $item1->id}}">{{ $item1->fname}}  {{ $item1->lname}}</option> 
-                                                @endif                                      
-                                                                                                                      
-                                                @endforeach 
-                                        </select>
-                                      </div>
-                                </div> 
+                            <div class="row mt-3">  
                                 <div class="col-md-2 text-end">
                                     <label for="orginfo_po_id">ผู้อำนวยการ :</label>
                                 </div>
@@ -299,17 +290,37 @@ use App\Http\Controllers\StaticController;
                                     <div class="form-group">                                        
                                         <select id="orginfo_po_id" name="orginfo_po_id" class="form-control form-control-lg" style="width: 100%">
                                             <option value=""></option>
-                                                @foreach ($users as $item2 ) 
+                                                @foreach ($users as $item2 )  
                                                 @if ($orginfo->orginfo_po_id == $item2->id)
-                                                <option value="{{ $item2->id}}" selected>{{ $item2->fname}}  {{ $item2->lname}}</option>    
+                                                <option value="{{ $item2->id}}" selected>{{ $item2->fname}}  {{ $item2->lname}}</option> 
                                                 @else
-                                                <option value="{{ $item2->id}}">{{ $item2->fname}}  {{ $item2->lname}}</option>    
-                                                @endif                                       
-                                                                                                                   
+                                                <option value="{{ $item2->id}}">{{ $item2->fname}}  {{ $item2->lname}}</option> 
+                                                @endif
+                                                   
+                                                @endforeach 
+                                        </select>
+                                      </div>
+                                </div>                               
+                                <div class="col-md-2 text-end">
+                                    <label for="head_sso_id">สาธารณสุขอำเภอ :</label>
+                                </div>
+                                <div class="col-md-4"> 
+                                    <div class="form-group">                                        
+                                        <select id="head_sso_id" name="head_sso_id" class="form-control form-control-lg" style="width: 100%">
+                                            <option value=""></option>
+                                                @foreach ($users as $item1 )  
+                                                @if ($orginfo->head_sso_id == $item1->id)
+                                                <option value="{{ $item1->id}}" selected>{{ $item1->fname}}  {{ $item1->lname}}</option>  
+                                                @else
+                                                <option value="{{ $item1->id}}">{{ $item1->fname}}  {{ $item1->lname}}</option>  
+                                                @endif 
+                                               
                                                 @endforeach 
                                         </select>
                                       </div>
                                 </div> 
+                                
+                            </div>
                             </div>
                             {{-- <div class="card-footer mt-3"> --}}
                                 <div class="col-md-12 mt-4 text-end"> 
@@ -364,7 +375,7 @@ use App\Http\Controllers\StaticController;
             placeholder: "--เลือก--",
             allowClear: true
         });
-        $('#sso_id').select2({
+        $('#head_sso_id').select2({
             placeholder: "--เลือก--",
             allowClear: true
         });
