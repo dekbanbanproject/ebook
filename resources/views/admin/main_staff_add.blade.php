@@ -223,67 +223,54 @@
                     <div class="card cardshadow">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-lg-2">
-                                    <div class="mb-3">
+                                <div class="col-lg-2 mb-3"> 
                                         <label class="form-label" for="pname">คำนำหน้า :</label>
                                         <select id="pname" name="pname" class="form-control "
                                             style="width: 100%"> 
-                                            @foreach ($users_prefix as $pre)
-                                                 
-                                                    <option value="{{ $pre->prefix_id }}">{{ $pre->prefix_name }} </option>
-                                           
+                                            @foreach ($users_prefix as $pre)                                                 
+                                                    <option value="{{ $pre->prefix_id }}">{{ $pre->prefix_name }} </option>                                           
                                             @endforeach
-                                        </select>
-                                    </div>
+                                        </select> 
                                 </div>
-                                <div class="col-lg-4">
-                                    <div class="mb-3">
+                                <div class="col-lg-2 mb-3"> 
                                         <label class="form-label" for="fname">ชื่อ :</label>
-                                        <input type="text" class="form-control form-control-sm" id="fname" name="fname">
-                                    </div>
+                                        <input type="text" class="form-control form-control-sm" id="fname" name="fname"> 
                                 </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
+                                <div class="col-lg-2 mb-3"> 
                                         <label class="form-label" for="lname">นามสกุล :</label>
-                                        <input type="text" class="form-control form-control-sm" id="lname" name="lname" >
-                                    </div>
+                                        <input type="text" class="form-control form-control-sm" id="lname" name="lname" > 
                                 </div>
+                                <div class="col-lg-6 mb-3"> 
+                                    <label class="form-label" for="store_id">Hospital :</label>
+                                    <select id="store_id" name="store_id" class="form-control " style="width: 100%"> 
+                                        @foreach ($users_prefix as $pre)                                                 
+                                                <option value="{{ $pre->prefix_id }}">{{ $pre->prefix_name }} </option>                                           
+                                        @endforeach
+                                    </select> 
+                            </div>
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
+                                <div class="col-lg-3 mb-3"> 
                                         <label class="form-label" for="cid">บัตรประชาชน</label>
-                                        <input type="text" class="form-control form-control-sm" id="cid" name="cid" >
-                                    </div>
+                                        <input type="text" class="form-control form-control-sm" id="cid" name="cid" > 
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
+                                <div class="col-lg-3 mb-3"> 
                                         <label class="form-label" for="position_id">ตำแหน่ง</label>
-                                        <select id="position_id" name="position_id" class="form-control"
-                                            style="width: 100%">
-                                          
-                                            @foreach ($position as $po)
-                                             
-                                                    <option value="{{ $po->POSITION_ID }}">{{ $po->POSITION_NAME }} </option>
-                                              
+                                        <select id="position_id" name="position_id" class="form-control" style="width: 100%">                                          
+                                            @foreach ($position as $po)                                             
+                                                    <option value="{{ $po->POSITION_ID }}">{{ $po->POSITION_NAME }} </option>                                              
                                             @endforeach
                                         </select>
-                                       
-                                    </div>
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
+                                <div class="col-lg-3 mb-3"> 
                                         <label class="form-label" for="username">ชื่อผู้ใช้งาน</label>
-                                        <input type="text" class="form-control form-control-sm" id="username" name="username">
-                                    </div>
+                                        <input type="text" class="form-control form-control-sm" id="username" name="username"> 
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="mb-3">
+                                <div class="col-lg-3 mb-3"> 
                                         <label class="form-label" for="password">Password</label>
                                         <input type="password" class="form-control form-control-sm" id="password"
-                                            name="password" required>
-                                    </div>
+                                            name="password" required> 
                                 </div>
 
                             </div>
@@ -394,7 +381,11 @@
                         placeholder: "--เลือก--",
                         allowClear: true
                     });
-
+                    $('#store_id').select2({
+                        placeholder: "--เลือก--",
+                        allowClear: true
+                    });
+                    
                     $('#datepicker').datepicker({
                         format: 'yyyy-mm-dd'
                     });

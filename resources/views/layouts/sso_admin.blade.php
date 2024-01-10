@@ -197,12 +197,7 @@
                 <!-- Left Menu Start -->
                 <ul class="metismenu list-unstyled" id="side-menu">
                     <li class="menu-title">Menu</li>
-                    <li>
-                        <a href="{{ url('main_staff') }}"> 
-                            <i class="fa-solid fa-user-group text-primary"></i> 
-                            <span>เจ้าหน้าที่ </span>
-                        </a>
-                    </li>
+                   
                     
                     {{-- <li>
                         <a href="{{ url('main_hospital') }}"> 
@@ -219,6 +214,12 @@
                             <li><a href="{{ url('main_hospital') }}" class="has-arrow">My Hospital</a></li> 
                             <li><a href="{{ url('main_hospital_all') }}" class="has-arrow">Orther Hospital</a></li> 
                         </ul>
+                    </li>
+                    <li>
+                        <a href="{{ url('main_staff') }}"> 
+                            <i class="fa-solid fa-user-group text-primary"></i> 
+                            <span>เจ้าหน้าที่ </span>
+                        </a>
                     </li>
                    
                 </ul>
