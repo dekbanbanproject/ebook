@@ -205,17 +205,21 @@
                     </li>
                     
                     {{-- <li>
-                        <a href="{{ url('user_train') }}">
-                            <i class="fas fa-swatchbook text-success"></i>
-                            <span>ประชุม/อบรม/ดูงาน</span>
+                        <a href="{{ url('main_hospital') }}"> 
+                            <i class="far fa-hospital text-success"></i>
+                            <span>Hospital</span>
                         </a>
                     </li> --}}
-                    {{-- <li>
-                        <a href="{{ url('ct_rep_import') }}">
-                            <i class="fa fa-lungs-virus text-primary"></i>
-                            <span>Import Excel CT</span>
+                    <li>
+                        <a href="javascript: void(0);" class="has-arrow waves-effect">
+                            <i class="far fa-hospital text-success"></i>
+                            <span>Hospital</span>
                         </a>
-                    </li> --}}
+                        <ul class="sub-menu" aria-expanded="true"> 
+                            <li><a href="{{ url('main_hospital') }}" class="has-arrow">My Hospital</a></li> 
+                            <li><a href="{{ url('main_hospital_all') }}" class="has-arrow">Orther Hospital</a></li> 
+                        </ul>
+                    </li>
                    
                 </ul>
             </div>

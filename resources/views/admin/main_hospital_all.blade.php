@@ -151,12 +151,12 @@ use App\Http\Controllers\StaticController;
     <div class="container-fluid"> 
         <div class="row">
             <div class="col-md-4">
-                <h4 class="mb-sm-0">Main Ebook Staff</h4>
+                <h4 class="mb-sm-0">Main Ebook Hospital</h4>
             </div>
             <div class="col"></div>
             <div class="col-md-3 text-end">
-                <a href="{{url('main_staff_add')}}" class="ladda-button btn-pill btn btn-primary d-shadow me-2" target="_blank">
-                    <span class="ladda-label"><i class="fa-solid fa-user-group text-white me-2"></i> Add Staff </span>
+                <a href="{{url('main_hospital_alladd')}}" class="ladda-button btn-pill btn btn-primary d-shadow me-2" target="_blank">
+                    <span class="ladda-label"><i class="far fa-hospital text-white me-2"></i> Add Hospital </span>
                     <span class="ladda-spinner"></span> 
                 </a>                
             </div> 
@@ -177,30 +177,29 @@ use App\Http\Controllers\StaticController;
                                     <tr> 
                                         <th width="5%" class="text-center">ลำดับ</th>  
                                         <th class="text-center">Picture</th>
-                                        <th class="text-center">ชื่อ-นามสกุล</th>
-                                        <th class="text-center" >cid</th>
-                                        <th class="text-center" >username</th> 
-                                        <th class="text-center">type</th>  
+                                        <th class="text-center">Hospital</th>
+                                        <th class="text-center" >ผู้อำนวยการ</th>
+                                        <th class="text-center" >สาธารณสุขอำเภอ</th> 
+                                        <th class="text-center">Tel</th>  
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $i = 1; ?>
-                                    @foreach ($users as $item) 
+                                    @foreach ($orginfo as $item) 
                                     
-                                        <tr id="tr_{{$item->id}}" >                                                  
+                                        <tr id="tr_{{$item->orginfo_id}}" >                                                  
                                             <td class="text-center" width="5%">{{ $i++ }}</td>    
                                             <td class="text-center" width="10%">
-                                                <img src="{{ asset('storage/person/' . $item->img) }}" alt="70x70"
+                                                <img src="{{ asset('storage/org/' . $item->orginfo_img) }}" alt="70x70"
                                                 class="img-thumbnail rounded-circle avatar-lg"  data-holder-rendered="true">
                                             </td> 
-                                           
+                                            {{-- <td class="text-center" width="5%"><a href="{{url('user_train_edit/'.$item->train_id)}}">{{ $item->train_book_no }} </a></td>   --}}
                                             <td class="p-2">
-                                                <a href="{{url('main_staff_edit/'.$item->id)}}"> {{ $item->fname }} {{ $item->lname }} </a>
-                                               
+                                                <a href="{{url('main_hospital_alledit/'.$item->orginfo_id)}}"> {{ $item->orginfo_name }}</a> 
                                             </td>  
-                                            <td class="text-center" width="10%">{{ $item->cid }}</td> 
-                                            <td class="text-center" width="10%">{{ $item->username }}</td>  
-                                            <td class="text-center" width="10%">{{ $item->type }} </td>   
+                                            <td class="text-start" >{{ $item->orginfo_po_name }}</td> 
+                                            <td class="text-start" width="10%">{{ $item->head_sso_name }}</td>  
+                                            <td class="text-center" width="10%">{{ $item->orginfo_tel }} </td>   
                                         </tr>
                                  
                                     @endforeach

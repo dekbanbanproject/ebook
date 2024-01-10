@@ -227,8 +227,7 @@
                                     <div class="mb-3">
                                         <label class="form-label" for="pname">คำนำหน้า :</label>
                                         <select id="pname" name="pname" class="form-control "
-                                            style="width: 100%">
-                                            {{-- <option value=""></option> --}}
+                                            style="width: 100%"> 
                                             @foreach ($users_prefix as $pre)
                                                  
                                                     <option value="{{ $pre->prefix_id }}">{{ $pre->prefix_name }} </option>
