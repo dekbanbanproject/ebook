@@ -51,6 +51,10 @@ Route::middleware(['type'])->group(function(){
         Route::match(['get','post'],'user_train_edit/{id}',[App\Http\Controllers\TrainController::class, 'user_train_edit'])->name('u.user_train_edit');//
         Route::match(['get','post'],'user_train_update',[App\Http\Controllers\TrainController::class, 'user_train_update'])->name('u.user_train_update');//
         Route::match(['get','post'],'user_train_print/{id}',[App\Http\Controllers\TrainController::class, 'user_train_print'])->name('u.user_train_print');//
+       
+        Route::match(['get','post'],'user_train_informed/{id}',[App\Http\Controllers\TrainController::class, 'user_train_informed'])->name('u.user_train_informed');//
+        Route::match(['get','post'],'user_train_informed_edit/{id}',[App\Http\Controllers\TrainController::class, 'user_train_informed_edit'])->name('u.user_train_informed_edit');//
+        Route::match(['get','post'],'user_train_informed_update',[App\Http\Controllers\TrainController::class, 'user_train_informed_update'])->name('u.user_train_informed_update');//
 
         Route::match(['get','post'],'addlocation',[App\Http\Controllers\TrainController::class, 'addlocation'])->name('u.addlocation');//
 

@@ -252,7 +252,30 @@ $datenow = date('Y-m-d');
                                     <label class="form-label" for="train_detail" >ยานพาหนะ</label> 
                             </div> 
                             <div class="col-md-2">  
-                                <input type="text" class="form-control form-control-sm" id="train_vehicle" name="train_vehicle" value="{{$dataedits->train_vehicle}}">                          
+                                {{-- <input type="text" class="form-control form-control-sm" id="train_vehicle" name="train_vehicle" value="{{$dataedits->train_vehicle}}">   --}}
+                                <select id="train_vehicle" name="train_vehicle" class="form-control" style="width: 100%">
+                                    {{-- <option value="">-เลือก-</option>  --}}
+                                    @if ($dataedits->train_vehicle == '1')
+                                        <option value="1" selected>รถโดยสารประจำทาง</option> 
+                                        <option value="2">รถยนต์ส่วนบุคคล </option> 
+                                        <option value="3">รถยนต์ของทางราชการ </option> 
+                                        <option value="4">อื่นๆ</option> 
+                                    @elseif ($dataedits->train_vehicle == '2')
+                                        <option value="1" >รถโดยสารประจำทาง</option> 
+                                        <option value="2" selected>รถยนต์ส่วนบุคคล </option> 
+                                        <option value="3">รถยนต์ของทางราชการ </option> 
+                                        <option value="4">อื่นๆ</option> 
+                                    @elseif ($dataedits->train_vehicle == '3')
+                                        <option value="1" >รถโดยสารประจำทาง</option> 
+                                        <option value="2">รถยนต์ส่วนบุคคล </option> 
+                                        <option value="3" selected>รถยนต์ของทางราชการ </option> 
+                                        <option value="4">อื่นๆ</option> 
+                                    @else
+                                        
+                                    @endif
+                                    
+                                    
+                                </select>                         
                             </div>
                             <div class="col-md-2"> 
                                 <label class="form-label" for="train_vehicle_pai" >ทะเบียน </label> 
@@ -301,9 +324,33 @@ $datenow = date('Y-m-d');
                                 <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" onclick="addlocation();">  
                                     <i class="fas fa-plus"></i> 
                                 </button>  
-                            </div>
-                         
+                            </div>                         
                         </div>
+                        <div class="row mt-2">
+                            <div class="col-md-2"> 
+                                    <label class="form-label" for="train_expenses" >เบิกค่าใช้จ่ายจาก</label> 
+                            </div> 
+                            <div class="col-md-2">   
+                                <select id="train_expenses" name="train_expenses" class="form-control" style="width: 100%">
+                                    <option value="">-เลือก-</option>  
+                                    @if ($dataedits->train_expenses == '1')
+                                        <option value="1" selected>ต้นสังกัด</option> 
+                                        <option value="2">ผู้จัดงาน </option> 
+                                        <option value="3">ไม่เบิกค่าใช้จ่ายใดๆ </option>  
+                                    @elseif ($dataedits->train_expenses == '2')
+                                        <option value="1" >ต้นสังกัด</option> 
+                                        <option value="2" selected>ผู้จัดงาน </option> 
+                                        <option value="3">ไม่เบิกค่าใช้จ่ายใดๆ </option>  
+                                    @else
+                                        <option value="1" >ต้นสังกัด</option> 
+                                        <option value="2">ผู้จัดงาน </option> 
+                                        <option value="3" selected>ไม่เบิกค่าใช้จ่ายใดๆ </option>  
+                                    @endif
+                                </select> 
+                                                      
+                            </div>
+                        </div>
+
                         <div class="row mt-2">  
                             <div class="col-md-2">
                                 <label class="form-label" for="signature" >Signature </label> 
@@ -462,15 +509,15 @@ $datenow = date('Y-m-d');
             var train_head             = $('#train_head').val(); 
             var train_locate           = $('#train_locate').val();
             var train_id               = $('#train_id').val();
-            // var train_expenses_out = $('#train_expenses_out').val(); 
-            var signature             = $('#signature').val();
-            var user_id               = $('#user_id').val();
+            var train_expenses         = $('#train_expenses').val(); 
+            var signature              = $('#signature').val();
+            var user_id                = $('#user_id').val();
             $.ajax({
                 url: "{{ route('u.user_train_update') }}",
                 type: "POST",
                 dataType: 'json',
                 data: {
-                    train_book_advert, train_book_no, train_date_go,train_vehicle_pai,
+                    train_book_advert, train_book_no, train_date_go,train_vehicle_pai,train_expenses,
                     train_date_back, train_title, train_detail,signature,user_id,
                     train_assign_work, train_vehicle,train_head,train_locate,train_id
                 },

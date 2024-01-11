@@ -143,21 +143,16 @@ class TrainController extends Controller
                 'train_date_back'          => $request->train_date_back,
                 'train_title'              => $request->train_title, 
                 'train_detail'             => $request->train_detail,
-
                 'train_assign_work'        => $request->train_assign_work,
                 'train_assign_work_name'   => $sige_id->fname. '  '.$sige_id->lname,
-
                 'train_vehicle'            => $request->train_vehicle,
                 'train_vehicle_pai'        => $request->train_vehicle_pai,
-
+                'train_expenses'           => $request->train_expenses,
                 'train_head'               => $request->train_head, 
                 'train_head_name'          => $head_id->fname. '  '.$head_id->lname,
-
-                'train_date'               => $date, 
-               
+                'train_date'               => $date,                
                 'train_locate'             => $request->train_locate, 
                 'train_locate_name'        => $locate_id->train_location_name,
-
                 'user_id'                  => $request->user_id, 
                 'train_signature'          => $add_img,
             ]);  
@@ -221,21 +216,16 @@ class TrainController extends Controller
                 'train_date_back'          => $request->train_date_back,
                 'train_title'              => $request->train_title, 
                 'train_detail'             => $request->train_detail,
-
                 'train_assign_work'        => $request->train_assign_work,
                 'train_assign_work_name'   => $sige_id->fname. '  '.$sige_id->lname,
-
+                'train_expenses'           => $request->train_expenses,
                 'train_vehicle'            => $request->train_vehicle,
                 'train_vehicle_pai'        => $request->train_vehicle_pai,
-
                 'train_head'               => $request->train_head, 
                 'train_head_name'          => $head_id->fname. '  '.$head_id->lname,
-
                 'train_date'               => $date, 
-
                 'train_locate'             => $request->train_locate, 
                 'train_locate_name'        => $locate_id->train_location_name,
-
                 'user_id'                  => $request->user_id, 
                 'train_signature'          => $add_img,
             ]);  
@@ -243,20 +233,97 @@ class TrainController extends Controller
                 'status'     => '200'
             ]); 
         } else {
-            return response()->json([
-                'status'     => '50',
-            ]);
+            $check = Train::where('train_id',$train_id)->where('train_signature','<>','')->count();
+            if ($check > 0) {
+                Train::where('train_id',$train_id)->update([ 
+                    'train_book_advert'        => $request->train_book_advert, 
+                    'train_book_no'            => $request->train_book_no, 
+                    'train_date_go'            => $request->train_date_go, 
+                    'train_date_back'          => $request->train_date_back,
+                    'train_title'              => $request->train_title, 
+                    'train_detail'             => $request->train_detail,    
+                    'train_assign_work'        => $request->train_assign_work,
+                    'train_assign_work_name'   => $sige_id->fname. '  '.$sige_id->lname,
+                    'train_expenses'           => $request->train_expenses,
+                    'train_vehicle'            => $request->train_vehicle,
+                    'train_vehicle_pai'        => $request->train_vehicle_pai,    
+                    'train_head'               => $request->train_head, 
+                    'train_head_name'          => $head_id->fname. '  '.$head_id->lname,    
+                    'train_date'               => $date,     
+                    'train_locate'             => $request->train_locate, 
+                    'train_locate_name'        => $locate_id->train_location_name,    
+                    'user_id'                  => $request->user_id,  
+                ]);  
+                return response()->json([
+                    'status'     => '200'
+                ]);
+            } else {
+                return response()->json([
+                    'status'     => '50',
+                ]);
+            }      
         }
                    
                          
+    }
+    public function user_train_informed_edit(Request $request,$id)
+    { 
+        $data_show = Train::where('train_id',$id)->first();
+        
+        return response()->json([
+            'status'               => '200', 
+            'data_show'            =>  $data_show,
+        ]);
+    }
+    
+    public function user_train_informed_update(Request $request)
+    { 
+        $id = $request->train_id;
+        $add_img      = $request->input('signature'); 
+
+        // Train::where('train_id',$id)->update([ 
+        //     'train_assign_work_active'   => 'Y'  
+        // ]);  
+        if ($add_img != '') {
+            Train::where('train_id',$id)->update([ 
+                'train_assign_work_active'        => 'Y',
+                'train_signature_assign'          => $add_img,
+            ]);  
+            return response()->json([
+                'status'     => '200'
+            ]); 
+        } else {
+            $check = Train::where('train_id',$id)->where('train_signature_assign','<>','')->count();
+            if ($check > 0) {
+                Train::where('train_id',$id)->update([ 
+                    'train_assign_work_active'   => 'Y',  
+                ]);  
+                return response()->json([
+                    'status'     => '200'
+                ]);
+            } else {
+                return response()->json([
+                    'status'     => '50',
+                ]);
+            }      
+        }
+        return response()->json(['status' => '200','success' => 'Success']);
+    }
+    public function user_train_informed(Request $request,$id)
+    { 
+       Train::where('train_id',$id)->update([ 
+            'train_assign_work_active'   => 'Y'  
+        ]);  
+        return response()->json(['status' => '200','success' => 'Success']);
     }
 
     public function user_train_print(Request $request, $id)
     { 
         $dataedit = Train::leftjoin('users', 'users.id', '=', 'train.user_id')->leftjoin('users_prefix', 'users_prefix.prefix_id', '=', 'users.pname')
-            ->leftjoin('position', 'position.POSITION_ID', '=', 'users.position_id')
+            ->leftjoin('position', 'position.POSITION_ID', '=', 'users.position_id')->leftjoin('orginfo', 'orginfo.orginfo_id', '=', 'users.store_id')
             ->where('train_id', '=', $id)->first();
-        
+        $userreq = $dataedit->prefix_name.' '.$dataedit->fname.'  '.$dataedit->lname;
+
         $org = DB::table('orginfo')->where('orginfo_id','=',1)
             ->leftjoin('users','users.id','=','orginfo.orginfo_po_id')
             ->leftjoin('users_prefix','users_prefix.prefix_code','=','users.pname')
@@ -326,11 +393,21 @@ class TrainController extends Controller
 
         // ข้าพเจ้ามอบหมายงานให้
         $assignwork = Train::leftjoin('users', 'users.id', '=', 'train.train_assign_work')->leftjoin('users_prefix', 'users_prefix.prefix_id', '=', 'users.pname')
-        ->leftjoin('position', 'position.POSITION_ID', '=', 'users.position_id')
+        // ->leftjoin('position', 'position.POSITION_ID', '=', 'users.position_id')
         ->where('train_id', '=', $id)->first();
-        $assign = $assignwork->prefix_name.' '.$assignwork->fname.'  '.$assignwork->lname;
-        $assign_posi = $assignwork->POSITION_NAME;
+        $sing_id      = User::leftjoin('position', 'position.POSITION_ID', '=', 'users.position_id')
+            ->leftjoin('orginfo', 'orginfo.orginfo_id', '=', 'users.store_id')
+            ->where('users.id','=',$assignwork->train_assign_work)
+            ->first();
 
+        $assign = $assignwork->prefix_name.' '.$assignwork->fname.'  '.$assignwork->lname;
+        $assign_posi = $sing_id->position_id;
+        // dd($assign_posi);
+        $dposi = Position::where('POSITION_ID', '=', $assign_posi)->first();
+        // $dataedit = Train::leftjoin('users', 'users.id', '=', 'train.user_id')->leftjoin('users_prefix', 'users_prefix.prefix_id', '=', 'users.pname')
+        // ->leftjoin('position', 'position.POSITION_ID', '=', 'users.position_id')
+        // ->where('train_id', '=', $id)->first();
+        // dd($dposi->POSITION_NAME);
         $pdf->SetLeftMargin(22);
         $pdf->SetRightMargin(5);
        
@@ -343,7 +420,7 @@ class TrainController extends Controller
 
         $pdf->Cell(135);
         $pdf->SetFont('THSarabunNew', '', 14);
-        $no = $pdf->Text(160,14,iconv( 'UTF-8','TIS-620','สำนักงานสาธารณสุขอำเภอสตึก' )); 
+        $no = $pdf->Text(160,14,iconv( 'UTF-8','TIS-620','สำนักงาน'.$dataedit->sso_name )); 
         $pdf->Text(160,19,iconv( 'UTF-8','TIS-620','เลขที่รับ' ));
         $pdf->Text(160,25,iconv( 'UTF-8','TIS-620','วันที่ ......../.................../.............' ));
         $pdf->Text(160,30,iconv( 'UTF-8','TIS-620','เวลา ..........................................' ));
@@ -355,124 +432,141 @@ class TrainController extends Controller
         // $pdf->Text(75, 33, iconv('UTF-8', 'TIS-620', 'โรงพยาบาล ' . $org->orginfo_name));
         $pdf->SetFont('THSarabunNew Bold', '', 17);
         $pdf->Text(25, 41, iconv('UTF-8', 'TIS-620', 'ส่วนราชการ '));
-        $pdf->SetFont('THSarabunNew', '', 17);
-        $pdf->Text(50, 41, iconv('UTF-8', 'TIS-620', ''.$org->orginfo_name.' อำเภอสตึก จังหวัดบุรีรัมย์ '));
+        $pdf->SetFont('THSarabunNew', '', 16);
+        $pdf->Text(48, 41, iconv('UTF-8', 'TIS-620', ''.$org->orginfo_name.' อำเภอสตึก จังหวัดบุรีรัมย์ '));
         $pdf->SetFont('THSarabunNew Bold', '', 17);
         $pdf->Text(25, 49, iconv('UTF-8', 'TIS-620', 'ที่ '));   
         $pdf->SetFont('THSarabunNew', '', 15);
         $pdf->Text(97, 49, iconv('UTF-8', 'TIS-620', 'วันที่ '. DateThaifu($datnow)));  
 
         $pdf->SetFont('THSarabunNew', '', 15);
-        $pdf->Text(35, 49, iconv('UTF-8', 'TIS-620', ''. $dataedit->train_book_no));
+        $pdf->Text(30, 49, iconv('UTF-8', 'TIS-620', ''. $dataedit->train_book_no));
         $pdf->SetFont('THSarabunNew Bold', '', 17);
         $pdf->Text(25, 57, iconv('UTF-8', 'TIS-620', 'เรื่อง '));
         $pdf->SetFont('THSarabunNew', '', 15);
-        $pdf->Text(35, 57, iconv('UTF-8', 'TIS-620', 'ขออนุมัติเดินทางไปราชการนอกสำนักงาน'));
+        $pdf->Text(35, 57, iconv('UTF-8', 'TIS-620', 'ขออนุมัติเข้าร่วมประชุม/อบรม/สัมมนาและขออนุญาตเดินทางไปราชการ'));
         // x1,y1,x2,y2
         $pdf->Line(25, 60, 180, 60);   // 25 คือ ย่อหน้า  // 45 คือ margintop   // 180 คือความยาวเส้น 
         $pdf->SetFont('THSarabunNew Bold', '', 15);
-        $pdf->Text(25, 65, iconv('UTF-8', 'TIS-620', 'เรียน สาธารณสุขอำเภอสตึก  '));
+        $pdf->Text(25, 65, iconv('UTF-8', 'TIS-620', 'เรียน '.$dataedit->sso_name));
         $pdf->SetFont('THSarabunNew', '', 15); 
-        $pdf->Text(35, 73, iconv('UTF-8', 'TIS-620', 'ข้าพเจ้า  '. $dataedit->prefix_name . '' . $dataedit->fname . '  ' . $dataedit->lname));
+        $pdf->Text(45, 73, iconv('UTF-8', 'TIS-620', 'ข้าพเจ้า  '. $dataedit->prefix_name . '' . $dataedit->fname . '  ' . $dataedit->lname));
         $pdf->Text(95, 73, iconv('UTF-8', 'TIS-620', 'ตำแหน่ง  '. $dataedit->POSITION_NAME ));
-        $pdf->Text(25, 80, iconv('UTF-8', 'TIS-620', 'ปฎิบัติงานประจำอยู่ที่ '.$org->orginfo_name.' มึความประสงค์ขออนุมัติเดินทางไปเข้าร่วม'));
-        $pdf->Text(25, 88, iconv('UTF-8', 'TIS-620', 'เป็นวิทยากรประชุมเชิงปฎิบัติการเรียกเก็บค่าบริการผู้ป่วยสิทธิประกันสังคมและสิทธิ์อื่นๆ ของกลุ่มโรงพยาบาลส่งเสริม'));
-        $pdf->Text(25, 96, iconv('UTF-8', 'TIS-620', 'สุขภาพตำบล ในจังหวัดบุรีรัมย์ ปีงบประมาณ 2567 ดังโปรแกรมดังต่อไปนี้'));
-        $pdf->Text(25, 104, iconv('UTF-8', 'TIS-620', 'สถานที่ปฎิบัติราชการ '. $dataedit->train_locate_name));
-        $pdf->Text(25, 112, iconv('UTF-8', 'TIS-620', 'งานที่ปฎิบัติ '. $dataedit->train_detail));
-        $pdf->Text(25, 120, iconv('UTF-8', 'TIS-620', 'วันที่ไป '. DateThaifu($dataedit->train_date_go)));
-        $pdf->Text(70, 120, iconv('UTF-8', 'TIS-620', 'วันที่กลับ '. DateThaifu($dataedit->train_date_back)));
-        $pdf->Text(35, 128, iconv('UTF-8', 'TIS-620', 'โดยรถยนต์ '. $dataedit->train_vehicle .'  ทะเบียน '. $dataedit->train_vehicle_pai.'      ในระหว่างที่ข้าพเจ้าไปราชการครั้งนี้'));
-        $pdf->Text(25, 136, iconv('UTF-8', 'TIS-620', 'ข้าพเจ้ามอบหมายงานให้ '. $assign.'   ตำแหน่ง  '. $assign_posi ));
+        // $pdf->Text(25, 80, iconv('UTF-8', 'TIS-620', 'ปฎิบัติงานประจำอยู่ที่ '.$org->orginfo_name.' มึความประสงค์ขออนุมัติเดินทางไปเข้าร่วม'));
+        // $pdf->Text(25, 88, iconv('UTF-8', 'TIS-620', 'เป็นวิทยากรประชุมเชิงปฎิบัติการเรียกเก็บค่าบริการผู้ป่วยสิทธิประกันสังคมและสิทธิ์อื่นๆ ของกลุ่มโรงพยาบาลส่งเสริม'));
 
+        $pdf->Text(25, 80, iconv('UTF-8', 'TIS-620', 'มีความประสงค์ขออนุมัติเข้าร่วมประชุม/อบรม/สัมนา พร้อมขออนุญาตเดินทางไปราชการ เพื่อเข้าร่วมประชุม'));
+        $pdf->Text(25, 88, iconv('UTF-8', 'TIS-620', 'ชื่อหลักสูตร : '. $dataedit->train_title));
+        $pdf->Text(25, 96, iconv('UTF-8', 'TIS-620', 'รายละเอียด : '. $dataedit->train_detail));
+        // $pdf->Text(25, 104, iconv('UTF-8', 'TIS-620', 'สถานที่ปฎิบัติราชการ '. $dataedit->train_locate_name));
+        // $pdf->Text(25, 104, iconv('UTF-8', 'TIS-620', 'งานที่ปฎิบัติ '. $dataedit->train_detail));
+        $pdf->Text(25, 104, iconv('UTF-8', 'TIS-620', 'สถานที่จัด  : '. $dataedit->train_locate_name));
+        $pdf->Text(25, 112, iconv('UTF-8', 'TIS-620', 'ในระหว่าง   วันที่ '. DateThaifu($dataedit->train_date_go)));
+        $pdf->Text(95, 112, iconv('UTF-8', 'TIS-620', 'ถึงวันที่ '. DateThaifu($dataedit->train_date_back)));
+
+        // $pdf->Text(35, 120, iconv('UTF-8', 'TIS-620', 'เดินทางโดย '. $dataedit->train_vehicle .'  ทะเบียน '. $dataedit->train_vehicle_pai.'      ในระหว่างที่ข้าพเจ้าไปราชการครั้งนี้'));
+        // $pdf->Text(25, 120, iconv('UTF-8', 'TIS-620', 'เดินทางโดย '. $dataedit->train_vehicle .'  ทะเบียน '. $dataedit->train_vehicle_pai.'      '));
+        $pdf->Text(25, 120, iconv('UTF-8', 'TIS-620', 'เดินทางโดย '));
+
+        if ($dataedit->train_vehicle == '1') {
+            $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 43, 117, 4, 4); 
+            $pdf->Text(46, 120, iconv('UTF-8', 'TIS-620', '  รถโดยสารประจำทาง '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 82, 117, 4, 4); 
+            $pdf->Text(85, 120, iconv('UTF-8', 'TIS-620', '  รถยนต์ส่วนบุคคล '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 116, 117, 4, 4); 
+            $pdf->Text(119, 120, iconv('UTF-8', 'TIS-620', '  รถยนต์ของทางราชการ '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 157, 117, 4, 4); 
+            $pdf->Text(160, 120, iconv('UTF-8', 'TIS-620', '  อื่นๆ ......................'));
+        } elseif ($dataedit->train_vehicle == '2') {
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 43, 117, 4, 4); 
+            $pdf->Text(46, 120, iconv('UTF-8', 'TIS-620', '  รถโดยสารประจำทาง '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 82, 117, 4, 4); 
+            $pdf->Text(85, 120, iconv('UTF-8', 'TIS-620', '  รถยนต์ส่วนบุคคล '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 116, 117, 4, 4); 
+            $pdf->Text(119, 120, iconv('UTF-8', 'TIS-620', '  รถยนต์ของทางราชการ '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 157, 117, 4, 4); 
+            $pdf->Text(160, 120, iconv('UTF-8', 'TIS-620', '  อื่นๆ ......................'));
+        } elseif ($dataedit->train_vehicle == '3') {
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 43, 117, 4, 4); 
+            $pdf->Text(46, 120, iconv('UTF-8', 'TIS-620', '  รถโดยสารประจำทาง '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 82, 117, 4, 4); 
+            $pdf->Text(85, 120, iconv('UTF-8', 'TIS-620', '  รถยนต์ส่วนบุคคล '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 116, 117, 4, 4); 
+            $pdf->Text(119, 120, iconv('UTF-8', 'TIS-620', '  รถยนต์ของทางราชการ '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 157, 117, 4, 4); 
+            $pdf->Text(160, 120, iconv('UTF-8', 'TIS-620', '  อื่นๆ ......................'));
+        } else {
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 43, 117, 4, 4); 
+            $pdf->Text(46, 120, iconv('UTF-8', 'TIS-620', '  รถโดยสารประจำทาง '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 82, 117, 4, 4); 
+            $pdf->Text(85, 120, iconv('UTF-8', 'TIS-620', '  รถยนต์ส่วนบุคคล '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 116, 117, 4, 4); 
+            $pdf->Text(119, 120, iconv('UTF-8', 'TIS-620', '  รถยนต์ของทางราชการ '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 157, 117, 4, 4); 
+            $pdf->Text(160, 120, iconv('UTF-8', 'TIS-620', '  อื่นๆ ......................'));
+        }     
+
+        $pdf->Text(25, 128, iconv('UTF-8', 'TIS-620', 'ค่าใช้จ่าย '));
+
+        if ($dataedit->train_expenses == '1') {
+            $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 43, 125, 4, 4); 
+            $pdf->Text(46, 128, iconv('UTF-8', 'TIS-620', '  เบิกต้นสังกัด '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 82, 125, 4, 4); 
+            $pdf->Text(85, 128, iconv('UTF-8', 'TIS-620', '  เบิกผู้จัดงาน '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 116, 125, 4, 4); 
+            $pdf->Text(119, 128, iconv('UTF-8', 'TIS-620', '  ไม่เบิกค่าใช้จ่ายใดๆ ')); 
+        } elseif ($dataedit->train_expenses == '2') {
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 43, 125, 4, 4); 
+            $pdf->Text(46, 128, iconv('UTF-8', 'TIS-620', '  เบิกต้นสังกัด '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 82, 125, 4, 4); 
+            $pdf->Text(85, 128, iconv('UTF-8', 'TIS-620', '  เบิกผู้จัดงาน '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 116, 125, 4, 4); 
+            $pdf->Text(119, 128, iconv('UTF-8', 'TIS-620', '  ไม่เบิกค่าใช้จ่ายใดๆ '));         
+        } else {
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 43, 125, 4, 4); 
+            $pdf->Text(46, 128, iconv('UTF-8', 'TIS-620', '  เบิกต้นสังกัด '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 82, 125, 4, 4); 
+            $pdf->Text(85, 128, iconv('UTF-8', 'TIS-620', '  เบิกผู้จัดงาน '));
+            $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 116, 125, 4, 4); 
+            $pdf->Text(119, 128, iconv('UTF-8', 'TIS-620', '  ไม่เบิกค่าใช้จ่ายใดๆ '));
+        }
+
+        $pdf->Text(45, 136, iconv('UTF-8', 'TIS-620', 'ในระหว่างที่ข้าพเจ้าไปราชการครั้งนี้  ข้าพเจ้ามอบหมายงานให้  '. $assign ));
+        $pdf->Text(25, 144, iconv('UTF-8', 'TIS-620', ' ตำแหน่ง  '. $dposi->POSITION_NAME .'  เป็นผู้รับผิดชอบงานแทน'));        
         $pdf->Image($dataedit->train_signature, 82, 175, 50, 17, "png");
-        $pdf->Text(35, 177, iconv('UTF-8', 'TIS-620', 'จึงเรียนมาเพื่อโปรดพิจารณา'));
+        $pdf->Text(45, 155, iconv('UTF-8', 'TIS-620', 'จึงเรียนมาเพื่อโปรดพิจารณา'));
         $pdf->Text(80, 190, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้ขออนุญาต'));
         $pdf->SetFont('THSarabunNew', '', 15);
-        $pdf->Text(88, 198, iconv('UTF-8', 'TIS-620', '( ..................................................... )'));
+        $pdf->Text(88, 198, iconv('UTF-8', 'TIS-620', ' (  '.$userreq.'  )'));
         $pdf->Text(80, 206, iconv('UTF-8', 'TIS-620', 'ตำแหน่ง'));
         $pdf->Text(97, 206, iconv('UTF-8', 'TIS-620', ''. $dataedit->POSITION_NAME));
 
         $pdf->Image($dataedit->train_signature, 40, 205, 50, 17, "png");
         $pdf->Text(35, 220, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้มอบ'));
-        $pdf->Text(40, 227, iconv('UTF-8', 'TIS-620', '( .......................................................... )')); 
+        $pdf->Text(40, 227, iconv('UTF-8', 'TIS-620', '    (  '.$userreq.'  )')); 
 
+        $pdf->Image($dataedit->train_signature_assign, 115, 207, 50, 17, "png");
         $pdf->Text(110, 220, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) .................................................... ผู้รับมอบ'));
-        $pdf->Text(115, 227, iconv('UTF-8', 'TIS-620', '( .......................................................... )'));
+        $pdf->Text(115, 227, iconv('UTF-8', 'TIS-620', '   (  '.$assign.'  )'));
 
         $pdf->Text(35, 242, iconv('UTF-8', 'TIS-620', 'ความเห็นของผู้บังคับบัญชา'));
-        //ผู้ขออนุญาต
-        // if ($siguser != null) {  
-        //     //ตรงกลาง
-        //     $pdf->Image($siguser, 80, 85, 50, 17, "png");
-        //     $pdf->SetFont('THSarabunNew', '', 15);
-        //     $pdf->Text(71, 95, iconv('UTF-8', 'TIS-620', '(ลงชื่อ)                                        ผู้แจ้งซ่อม'));
-        //     $pdf->SetFont('THSarabunNew', '', 15);
-        //     // $pdf->Text(85, 105, iconv('UTF-8', 'TIS-620', '(   ' . $dataedit->com_repaire_user_name . '   )'));
-        // } else {
-            
-        // }
-
-        // $pdf->Line(25, 110, 180, 110);   // 25 คือ ย่อหน้า  // 45 คือ margintop   // 180 คือความยาวเส้น 
-        
+       
+        // $pdf->Line(25, 110, 180, 110);   // 25 คือ ย่อหน้า  // 45 คือ margintop   // 180 คือความยาวเส้น         
         if ($dataedit->train_active == "APPROVE") { 
             $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 47, 247, 4, 4);  
             $pdf->Text(53, 250, iconv('UTF-8', 'TIS-620', 'เห็นควรอนุมัติ')); 
-
             $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 140, 247, 4, 4);  
             $pdf->Text(147, 250, iconv('UTF-8', 'TIS-620', 'อนุมัติ')); 
-
         } else {
             $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 35, 250, 4, 4);
-         }
-       
+         }       
          $pdf->Image($dataedit->train_signature_po, 35, 257, 50, 17, "png");
          $pdf->Text(43, 274, iconv('UTF-8', 'TIS-620', '('.$po.' )'));
          $pdf->Text(25, 282, iconv('UTF-8', 'TIS-620', 'ผู้อำนวยการ'.$org->orginfo_name));
-
          $pdf->Image($dataedit->train_signature_sso, 124, 257, 50, 17, "png");
          $pdf->Text(135, 274, iconv('UTF-8', 'TIS-620', '( '.$org->head_sso_name.' )'));
          $pdf->Text(137, 282, iconv('UTF-8', 'TIS-620', ''.$org->sso_name));
-        //ผู้ดูแลอนุญาต
-        // if ($sigstaff != null) {
-        //     $pdf->Image($sigstaff, 109, 173, 50, 17, "png");
-        //     $pdf->SetFont('THSarabunNew', '', 15);
-        //     $pdf->Text(100, 188, iconv('UTF-8', 'TIS-620', '(ลงชื่อ)                                            ผู้อนุญาต'));
-        //     // $pdf->Text(112, 198, iconv('UTF-8', 'TIS-620', '(   ' . $dataedit->car_service_staff_name . '   )'));
-        // } else {
-        //     // $pdf->Image($siguser, 105,173, 50, 17,"png"); 
-        //     $pdf->SetFont('THSarabunNew', '', 15);
-        //     $pdf->Text(100, 180, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) ......................................................... ผู้อนุญาต'));
-        //     $pdf->SetFont('THSarabunNew', '', 15);
-        //     $pdf->Text(108, 189, iconv('UTF-8', 'TIS-620', '( .......................................................... )'));
-        // }
-
-    
-        // if ($sigpo != null) { 
-        //     if ($dataedit->car_service_status == "noallow") {
-        //         $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 105, 217, 4, 4);
-        //         $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 140, 217, 4, 4);
-        //     } else {
-        //         $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 140, 217, 4.5, 4.5);
-        //         $pdf->Image(base_path('public') . '/fpdf/img/checked.png', 105, 217, 4.5, 4.5); 
-        //     } 
-        //     $pdf->Image($sigpo, 109, 225, 50, 17, "png");
-        //     $pdf->Text(108, 249, iconv('UTF-8', 'TIS-620', $po)); 
-        //     $pdf->SetFont('THSarabunNew', '', 15);
-        //     $pdf->Text(100, 240, iconv('UTF-8', 'TIS-620', '(ลงชื่อ)                                              ผู้อนุญาต')); 
-        //     $pdf->Text(108, 258, iconv('UTF-8', 'TIS-620', 'ผู้อำนวยการ' . $orgpo->orginfo_name));
-        // } else { 
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 105, 217, 4, 4);
-        //     $pdf->Image(base_path('public') . '/fpdf/img/checkno.jpg', 140, 217, 4, 4);
-        //     $pdf->SetFont('THSarabunNew', '', 15);
-        //     $pdf->Text(100, 240, iconv('UTF-8', 'TIS-620', '(ลงชื่อ) ......................................................... ผู้อนุญาต'));
-        //     $pdf->SetFont('THSarabunNew', '', 15);
-        //     $pdf->Text(108, 249, iconv('UTF-8', 'TIS-620', '( .......................................................... )'));
-        //     $pdf->SetFont('THSarabunNew', '', 15);
-        //     $pdf->Text(108, 258, iconv('UTF-8', 'TIS-620', 'ผู้อำนวยการ' . $orgpo->orginfo_name));
-        // }
-
-
+      
         $pdf->Output();
 
         exit;

@@ -244,10 +244,18 @@ $datenow = date('Y-m-d');
                         
                         <div class="row mt-2">
                             <div class="col-md-2"> 
-                                    <label class="form-label" for="train_detail" >ยานพาหนะ</label> 
+                                    <label class="form-label" for="train_vehicle" >ยานพาหนะในการเดินทาง</label> 
                             </div> 
                             <div class="col-md-2">  
-                                <input type="text" class="form-control form-control-sm" id="train_vehicle" name="train_vehicle" >                          
+                                {{-- <input type="text" class="form-control form-control-sm" id="train_vehicle" name="train_vehicle" >   --}}
+                                <select id="train_vehicle" name="train_vehicle" class="form-control" style="width: 100%">
+                                    <option value="">-เลือก-</option> 
+                                    <option value="1">รถโดยสารประจำทาง</option> 
+                                    <option value="2">รถยนต์ส่วนบุคคล </option> 
+                                    <option value="3">รถยนต์ของทางราชการ </option> 
+                                    <option value="4">อื่นๆ</option> 
+                                </select> 
+                                                      
                             </div>
                             <div class="col-md-2"> 
                                 <label class="form-label" for="train_vehicle_pai" >ทะเบียน </label> 
@@ -291,8 +299,21 @@ $datenow = date('Y-m-d');
                                 <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" onclick="addlocation();">  
                                     <i class="fas fa-plus"></i> 
                                 </button>  
+                            </div>                         
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-2"> 
+                                    <label class="form-label" for="train_expenses" >เบิกค่าใช้จ่ายจาก</label> 
+                            </div> 
+                            <div class="col-md-2">   
+                                <select id="train_expenses" name="train_expenses" class="form-control" style="width: 100%">
+                                    <option value="">-เลือก-</option> 
+                                    <option value="1">ต้นสังกัด</option> 
+                                    <option value="2">ผู้จัดงาน </option> 
+                                    <option value="3">ไม่เบิกค่าใช้จ่ายใดๆ </option>  
+                                </select> 
+                                                      
                             </div>
-                         
                         </div>
                         <div class="row mt-2">  
                             <div class="col-md-2">
@@ -427,7 +448,7 @@ $datenow = date('Y-m-d');
         $('#ECLAIM_STATUS').select2({
             dropdownParent: $('#detailclaim')
         });
-                 
+        // train_vehicle  
         // Insertdata
         $.ajaxSetup({
             headers: {

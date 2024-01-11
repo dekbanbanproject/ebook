@@ -286,15 +286,9 @@
                                                             <label for=""
                                                                 style="color: rgb(130, 42, 245);font-size:13px"> {{ $item->fname }} {{ $item->lname }}</label>
                                                 </a> --}}
-                                                {{-- <button type="button" class="btn-icon btn-shadow btn-dashed btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#DetailModal{{ $item->train_id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="รับทราบ"> 
-                                                    {{ $item->fname }} {{ $item->lname }}
-                                                 </button> --}}
-                                                <button type="button" class="btn-icon btn-shadow btn-dashed btn btn-sm btn-outline-info MyModal_" value="{{ $item->train_id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="รับทราบ"> 
+                                                <button type="button" class="btn-icon btn-shadow btn-dashed btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#DetailModal{{ $item->train_id }}" data-bs-toggle="tooltip" data-bs-placement="top" title="รับทราบ"> 
                                                    {{ $item->fname }} {{ $item->lname }}
                                                 </button>
-                                                {{-- <button type="button" class="btn-icon btn-shadow btn-dashed btn btn-sm btn-outline-danger MoneyModal_"  value="{{ $va->plan_control_id }}" data-bs-toggle="tooltip" data-bs-placement="right" title="เบิกเงิน"> 
-                                                    <i class="fa-brands fa-bitcoin" style="font-size:17px;color: rgb(255, 34, 89)"></i> 
-                                                </button>  --}}
                                             </td>   
                                             <td class="text-center" width="5%">
                                                 <a href="{{url('user_train_print/'.$item->train_id)}}">
@@ -303,7 +297,7 @@
                                             </td> 
                                         </tr>
 
-                                        {{-- <div class="modal fade" id="DetailModal{{ $item->train_id }}" tabindex="-1"
+                                        <div class="modal fade" id="DetailModal{{ $item->train_id }}" tabindex="-1"
                                             role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-lg">
                                                 <div class="modal-content">
@@ -359,7 +353,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                     @endforeach
                                 </tbody>
                             </table>
@@ -374,58 +368,172 @@
 
 <div class="modal fade" id="MyModal" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true"> 
     <div class="modal-dialog modal-dialog-slideout">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="myExtraLargeModalLabel">
-                    รับทราบงานที่ได้รับมอบ</h5>  
-            </div>
-            <div class="modal-body">
-
-                <div class="row mt-2 mb-3">  
-                    <div class="col-md-3"> </div> 
-                    <div class="col-md-5">
-                        <h3 class="mt-1 text-center">Digital Signature</h3>
-                        <div id="signature-pad" class="mt-3 text-center">
-                            <div style="border:solid 1px teal;height:130px;width:340px;">
-                                <div id="note" onmouseover="my_function();" class="text-center">The
-                                    signature should be inside box</div>
-                                <canvas id="the_canvas" width="340px" height="130px"></canvas>
-                            </div>
-
-                            <input type="hidden" id="signature" name="signature">
-                            <input type="hidden" id="user_id" name="user_id" value=" {{ Auth::user()->id }}">
-                            <input type="hidden" name="store_id" id="store_id" value=" {{ Auth::user()->store_id }}">
-                            <button type="button" id="clear_btn"
-                                class="btn btn-secondary d-shadow btn-sm mt-2" data-action="clear"><span
-                                    class="glyphicon glyphicon-remove"></span>
-                                Clear
-                            </button>
-                            <button type="button" id="save_btn"
-                                class="btn btn-info d-shadow btn-sm mt-2 text-white" data-action="save-png"
-                                onclick="create();"><span class="glyphicon glyphicon-ok"></span>
-                                Create
-                            </button> 
-                            
-                        </div>
-                    </div>  
-            </div>
-            <input type="hidden" name="train_id" id="updatetrain_id">
-            <div class="modal-footer">
-                <div class="col-md-12 text-end">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="row"> 
+                <div class="col-md-8">
+                    <h5 class="modal-title" id="InsertModalLabel">ยื่นเรื่อง</h5>
+                </div>
+                <div class="col-md-4 text-end">
                     <div class="form-group">
-                        <button type="button" id="SaveBtn" class="ladda-button btn-pill btn btn-success d-shadow btn-sm mt-2">
-                            <i class="fa-solid fa-circle-check text-white"></i>
-                            บันทึกข้อมูล
+                        <button type="button" id="SaveBtn" class="btn-icon btn-shadow btn-dashed btn btn-outline-info me-2"> 
+                            <i class="pe-7s-diskette btn-icon-wrapper me-2"></i> Save
                         </button>
-                        <button type="button"
-                            class="ladda-button btn-pill btn btn-danger d-shadow btn-sm mt-2"
-                            data-bs-dismiss="modal"><i
-                                class="fa-solid fa-xmark me-2"></i>Close</button>
-
+                        <button type="button" class="btn-icon btn-shadow btn-dashed btn btn-outline-danger" data-bs-dismiss="modal">
+                            <i class="fa-solid fa-xmark me-2"></i>Close
+                        </button> 
                     </div>
                 </div>
             </div>
         </div>
+        <div class="modal-body">
+            <div class="row">
+                {{-- <div class="col-md-9"> 
+                    <div class="mb-3">
+                        <label class="form-label" for="train_book_advert" >หนังสืออ้างอิง :</label>
+                        <input type="text" class="form-control form-control-sm" id="train_book_advert" name="train_book_advert" >
+                    </div>
+                </div> --}}
+                {{-- <div class="col-md-3 mt-4">  
+                        <button type="button" class="ladda-button btn-pill btn btn-primary d-shadow" data-bs-toggle="modal" data-bs-target="#MyModal" data-bs-toggle="tooltip" data-bs-placement="right" title="ขอไปราชการ"> 
+                            <i class="fas fa-book-reader me-2"></i> 
+                            หนังสืออ้างอิง
+                        </button> 
+                </div> --}}
+            </div>
+            <div class="row">
+                <div class="col-md-3"> 
+                    <div class="mb-3">
+                        <label class="form-label" for="train_book_advert" >หนังสืออ้างอิง :</label>
+                        <input type="text" class="form-control form-control-sm" id="train_book_advert" name="train_book_advert" >
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_book_no" >เลขที่หนังสือ :</label>
+                        <input type="text" class="form-control form-control-sm" id="train_book_no" name="train_book_no" >
+                    </div>
+                </div> 
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_date_go" >วันที่ไป :</label> 
+                        <div class="input-group input-group-sm">  
+                            <input type="text" id="train_date_go" class="form-control" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_date_back" >วันที่กลับ :</label> 
+                        <div class="input-group input-group-sm">  
+                            <input type="text" id="train_date_back" class="form-control" data-toggle="datepicker" data-date-format="yyyy-mm-dd" data-date-autoclose="true" data-provide="datepicker" data-date-language="th-th" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_book_no" >เรื่อง :</label>
+                        <input type="text" class="form-control form-control-sm" id="train_title" name="train_title" >
+                    </div>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_detail" >รายละเอียด :</label>
+                        <textarea class="form-control form-control-sm" rows="3" id="train_detail" name="train_detail"></textarea>
+                        
+                    </div>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_locate" >สถานที่จัด :</label> 
+                        <input type="text" class="form-control form-control-sm" id="train_locate" name="train_locate" >
+                    </div>
+                </div> 
+                 
+            </div>  
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_assign_work" >มอบหมายงานให้ :</label> 
+                        <select id="train_assign_work" name="train_assign_work" class="form-control" style="width: 100%"> 
+                            @foreach ($users as $hn) 
+                                    <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option> 
+                            @endforeach
+                        </select>
+                    </div>
+                </div> 
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_vehicle" >ยานพาหนะที่ใช้ :</label> 
+                        <div class="input-group input-group-sm">  
+                            <input type="text" class="form-control form-control-sm" id="train_vehicle" name="train_vehicle" >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        <label class="form-label" for="train_head" >หัวหน้า :</label> 
+                        <div class="input-group input-group-sm">   
+                            <select id="train_head" name="train_head" class="form-control" style="width: 100%"> 
+                            @foreach ($users as $hn)
+                                @if ($hnid == $hn->id)
+                                    <option value="{{ $hn->id }}" selected> {{ $hn->fname }} {{ $hn->lname }} </option>
+                                @else
+                                    <option value="{{ $hn->id }}">{{ $hn->fname }} {{ $hn->lname }} </option>
+                                @endif
+                            @endforeach
+                        </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row"> 
+                <div class="col"></div>
+                <div class="col-md-4">
+                    {{-- <div class="mb-3">
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses" id="train_expenses" checked>
+                        <label class="form-check-label mt-2" for="train_expenses">
+                            เบิกค่าใช้จ่าย
+                        </label>
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses" id="train_expenses2">
+                        <label class="form-check-label mt-2" for="train_expenses2">
+                            ไม่เบิกค่าใช้จ่าย
+                        </label>
+                        
+                    </div> --}}
+                </div> 
+                {{-- <div class="col-md-4">
+                    <div class="mb-3"> 
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses_out" id="train_expenses_out" >
+                        <label class="form-check-label mt-2" for="train_expenses_out">
+                            เบิกค่าใช้จ่ายจากผู้จัด
+                        </label>
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses_out" id="train_expenses_out2">
+                        <label class="form-check-label mt-2" for="train_expenses_out2">
+                            ไม่เบิกค่าใช้จ่ายจากผู้จัด
+                        </label>
+                    </div>
+                </div>  --}}
+                {{-- <div class="col-md-4">
+                    <div class="mb-3"> 
+                        <input class="form-check-input dcheck me-2" type="radio" name="train_expenses_n" id="train_expenses" value="N">
+                        <label class="form-check-label mt-2" for="train_expenses_n">
+                            ไม่เบิกค่าใช้จ่าย
+                        </label>
+                    </div>
+                </div>  --}}
+                <div class="col"></div>
+            </div>  
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
 </div> 
  
  
@@ -504,23 +612,11 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
-        });
-        $(document).on('click', '.MyModal_', function() {
-                var train_id = $(this).val(); 
-                $('#MyModal').modal('show');
-                
-                $.ajax({
-                    type: "GET",
-                    url: "{{ url('user_train_informed_edit') }}" + '/' + train_id,
-                    success: function(data) { 
-                        $('#updatetrain_id').val(data.data_show.train_id) 
-                    },
-                });
             });
-        $('#SaveBtn').click(function() { 
-                var signature     = $('#signature').val();
-                var train_id      = $('#updatetrain_id').val();
-                var user_id       = $('#user_id').val();
+            $('#SaveBtn').click(function() { 
+                    var signature     = $('#signature').val();
+                    var train_id      = $('#train_id').val();
+                    var user_id       = $('#user_id').val();
             $.ajax({
                 url: "{{ route('u.user_train_informed_update') }}",
                 type: "POST",
