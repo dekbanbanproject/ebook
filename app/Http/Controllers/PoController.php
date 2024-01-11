@@ -56,7 +56,7 @@ class PoController extends Controller
                     ,t.train_vehicle,t.train_vehicle_pai,p.fname,p.lname,t.train_active
                     FROM train t
                     LEFT OUTER JOIN train_location tl ON tl.train_location_id = t.train_locate
-                    LEFT OUTER JOIN users p ON p.id = t.train_assign_work 
+                    LEFT OUTER JOIN users p ON p.id = t.user_id 
                     WHERE t.train_date_go BETWEEN "'.$startdate.'" and "'.$enddate.'"  
                     AND t.train_active = "REQ"              
             '); 
@@ -67,7 +67,7 @@ class PoController extends Controller
                     ,t.train_vehicle,t.train_vehicle_pai,p.fname,p.lname,t.train_active
                     FROM train t
                     LEFT OUTER JOIN train_location tl ON tl.train_location_id = t.train_locate
-                    LEFT OUTER JOIN users p ON p.id = t.train_assign_work 
+                    LEFT OUTER JOIN users p ON p.id = t.user_id 
                     WHERE t.train_date_go BETWEEN "'.$newDate.'" and "'.$date.'" 
                     AND t.train_active = "REQ"                
             '); 

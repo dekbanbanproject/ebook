@@ -201,7 +201,7 @@ $yb = date('Y') + 542;
                                         <th class="text-center" >เรื่อง</th> 
                                         <th class="text-center">วันที่ไป</th>  
                                         <th class="text-center">ถึงวันที่</th>  
-                                        {{-- <th class="text-center">มอบหมายงายนให้</th>  --}}
+                                        <th class="text-center">ผู้ขออนุญาต</th> 
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -233,7 +233,7 @@ $yb = date('Y') + 542;
                                             <td class="p-2">{{ $item->train_title }}</td>  
                                             <td class="text-center" width="8%">{{ $item->train_date_go }}</td> 
                                             <td class="text-center" width="8%">{{ $item->train_date_back }}</td>  
-                                            {{-- <td class="text-center" width="10%">{{ $item->fname }} {{ $item->lname }}</td>    --}}
+                                            <td class="text-center" width="15%">{{ $item->fname }} {{ $item->lname }}</td>   
                                         </tr>
                                  
                                     @endforeach
